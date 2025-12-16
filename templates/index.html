@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa – Áreas de Maceió</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- CSS próprio -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    />
+</head>
+<body>
+
+<header>
+    Mapa de Áreas – Maceió
+</header>
+
+<div id="container">
+    <div id="sidebar">
+        <h3>Filtrar Área</h3>
+
+        <select id="areaSelect">
+            <option value="">Selecione uma área</option>
+        </select>
+
+        <button
+            id="btnGrotaNoGrau"
+            class="btn-verde"
+        >
+            Filtrar Grota no Grau
+        </button>
+    </div>
+
+    <div id="map"></div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- JS do mapa -->
+<script src="{{ url_for('static', filename='js/mapa.js') }}"></script>
+
+</body>
+</html>

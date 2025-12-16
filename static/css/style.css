@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f8;
+}
+
+header {
+    background-color: #1f2937;
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#container {
+    display: flex;
+    height: calc(100vh - 50px);
+}
+
+#sidebar {
+    width: 300px;
+    background-color: white;
+    padding: 15px;
+    border-right: 1px solid #ddd;
+}
+
+#sidebar h3 {
+    margin-top: 0;
+}
+
+#map {
+    flex: 1;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
