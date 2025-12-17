@@ -1,137 +1,127 @@
-// ===============================
-// MAPA BASE
-// ===============================
 const map = L.map('map').setView([-9.6498, -35.7089], 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
 }).addTo(map);
 
-// ===============================
-// VARIÁVEIS GLOBAIS
-// ===============================
 let geojsonLayer;
-let todasAreas = [];
+let camadaSelecionada = null;
 let filtroGrotaAtivo = false;
 
-// ===============================
-// CARREGA GEOJSON
-// ===============================
+const areasGrota = ["Vale do Reginaldo", "Recanto Nabal"];
+
+function isGrota(feature) {
+    return areasGrota.includes(feature.properties.nm_fcu);
+}
+
+function estiloBase(feature) {
+    if (filtroGrotaAtivo && isGrota(feature)) {
+        return { color: "#16a34a", weight: 3, fillOpacity: 0.6 };
+    }
+    return { color: "#2563eb", weight: 2, fillOpacity: 0.3 };
+}
+
 fetch("/geojson")
     .then(res => res.json())
     .then(data => {
 
-        todasAreas = data.features;
+        geojsonLayer = L.geoJSON(data, {
+            style: estiloBase,
 
-        geojsonLayer = L.geoJSON(todasAreas, {
-            style: estiloPadrao,
-            onEachFeature: onEachFeature
+            onEachFeature: function (feature, layer) {
+                const props = feature.properties;
+                const nome = props.nm_fcu || "Área sem nome";
+
+                layer.bindTooltip(nome, { sticky: true });
+
+                layer.on({
+                    mouseover: e => {
+                        if (camadaSelecionada === e.target) return;
+                        e.target.setStyle({
+                            color: "#f97316",
+                            weight: 3,
+                            fillOpacity: 0.5
+                        });
+                    },
+
+                    mouseout: e => {
+                        if (camadaSelecionada === e.target) return;
+                        geojsonLayer.resetStyle(e.target);
+                    },
+
+                    click: e => {
+                        if (camadaSelecionada) {
+                            geojsonLayer.resetStyle(camadaSelecionada);
+                        }
+
+                        camadaSelecionada = e.target;
+
+                        e.target.setStyle({
+                            color: "#f97316",
+                            weight: 3,
+                            fillOpacity: 0.5
+                        });
+
+                        map.fitBounds(e.target.getBounds(), { padding: [20, 20] });
+
+                        document.getElementById("info-nome").innerText = nome;
+                        document.getElementById("info-populacao").innerText =
+                            props.populacao ?? "Não disponível";
+                        document.getElementById("info-domicilios").innerText =
+                            props.domicilios ?? "Não disponível";
+                        document.getElementById("info-area").innerText =
+                            props.area_km2 ? props.area_km2.toFixed(2) + " km²" : "Não disponível";
+                    }
+                });
+            }
         }).addTo(map);
 
-        preencherSelect();
+        const select = document.getElementById("areaSelect");
+
+        data.features.forEach((f, i) => {
+            const opt = document.createElement("option");
+            opt.value = i;
+            opt.text = f.properties.nm_fcu;
+            select.appendChild(opt);
+        });
+
+        select.addEventListener("change", function () {
+            if (this.value === "") return;
+            geojsonLayer.getLayers()[this.value].fire("click");
+        });
     });
 
-// ===============================
-// ESTILOS
-// ===============================
-function estiloPadrao() {
-    return {
-        color: "#2563eb",
-        weight: 2,
-        fillOpacity: 0.3
-    };
-}
+document.getElementById("btnGrotaNoGrau").addEventListener("click", function () {
+    filtroGrotaAtivo = !filtroGrotaAtivo;
 
-function estiloGrota() {
-    return {
-        color: "#16a34a",
-        weight: 3,
-        fillOpacity: 0.6
-    };
-}
+    geojsonLayer.eachLayer(l => geojsonLayer.resetStyle(l));
 
-// ===============================
-// FEATURE EVENTS
-// ===============================
-function onEachFeature(feature, layer) {
-    const nome = feature.properties.nm_fcu || "Área sem nome";
-
-    layer.bindTooltip(nome, { sticky: true });
-
-    layer.on({
-        mouseover: e => {
-            e.target.setStyle({
-                color: "#f97316",
-                weight: 3,
-                fillOpacity: 0.5
-            });
-        },
-        mouseout: e => {
-            geojsonLayer.resetStyle(e.target);
-        }
-    });
-}
-
-// ===============================
-// SELECT DE ÁREAS
-// ===============================
-function preencherSelect() {
-    const select = document.getElementById("areaSelect");
-
-    todasAreas.forEach((feature, index) => {
-        const option = document.createElement("option");
-        option.value = index;
-        option.text = feature.properties.nm_fcu;
-        select.appendChild(option);
-    });
-
-    select.addEventListener("change", function () {
-        if (this.value === "") return;
-
-        const layer = geojsonLayer.getLayers()[this.value];
-        map.fitBounds(layer.getBounds());
-    });
-}
-
-// ===============================
-// FILTRO GROTA NO GRAU
-// ===============================
-function filtrarGrotaNoGrau() {
-
-    geojsonLayer.clearLayers();
-
-    if (!filtroGrotaAtivo) {
-
-        const filtradas = todasAreas.filter(f =>
-            f.properties.nm_fcu === "Vale do Reginaldo" ||
-            f.properties.nm_fcu === "Recanto Nabal"
-        );
-
-        geojsonLayer.addData(filtradas);
-        geojsonLayer.setStyle(estiloGrota);
-
-        if (filtradas.length > 0) {
-            map.fitBounds(geojsonLayer.getBounds());
-        }
-
-        filtroGrotaAtivo = true;
-
-    } else {
-
-        geojsonLayer.addData(todasAreas);
-        geojsonLayer.setStyle(estiloPadrao);
-
-        filtroGrotaAtivo = false;
+    if (camadaSelecionada) {
+        camadaSelecionada.setStyle({
+            color: "#f97316",
+            weight: 3,
+            fillOpacity: 0.5
+        });
     }
-}
 
-// ===============================
-// EVENTOS (SEM onclick)
-// ===============================
-document.addEventListener("DOMContentLoaded", function () {
+    this.innerText = filtroGrotaAtivo
+        ? "Remover filtro Grota no Grau"
+        : "Filtrar Grota no Grau";
+});
 
-    const btnGrota = document.getElementById("btnGrotaNoGrau");
+document.getElementById("btnLimparFiltros").addEventListener("click", function () {
+    filtroGrotaAtivo = false;
+    camadaSelecionada = null;
 
-    btnGrota.addEventListener("click", filtrarGrotaNoGrau);
+    geojsonLayer.eachLayer(l => geojsonLayer.resetStyle(l));
 
+    document.getElementById("areaSelect").value = "";
+    document.getElementById("btnGrotaNoGrau").innerText = "Filtrar Grota no Grau";
+
+    map.setView([-9.6498, -35.7089], 12);
+
+    document.getElementById("info-nome").innerText = "-";
+    document.getElementById("info-populacao").innerText = "-";
+    document.getElementById("info-domicilios").innerText = "-";
+    document.getElementById("info-area").innerText = "-";
 });
