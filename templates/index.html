@@ -4,68 +4,42 @@
     <meta charset="UTF-8">
     <title>Mapa de Comunidades – Maceió</title>
 
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-geometryutil@0.10.0/src/leaflet.geometryutil.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<header>
-    Mapa de Comunidades – Maceió
-</header>
+<header>Mapa de Comunidades – Maceió</header>
 
 <div id="container">
 
-    <div id="sidebar">
+    <aside id="sidebar">
         <h3>Filtros</h3>
 
         <select id="areaSelect">
             <option value="">Selecione uma área</option>
         </select>
 
-        <button id="btnGrotaNoGrau" class="btn btn-success">
-            Filtrar Grota no Grau
-        </button>
+        <button id="btnGrotaNoGrau">Filtrar Grota no Grau</button>
+        <button id="btnAbairramento">Mostrar Abairramento</button>
+        <button id="btnLimparFiltros">Limpar filtros</button>
+    </aside>
 
-        <button id="btnLimparFiltros" class="btn btn-danger">
-            Limpar filtros
-        </button>
-    </div>
+    <main id="map-container">
 
-    <div id="map-container">
-
-        <!-- CARDS -->
         <div id="info-cards">
-            <div class="card">
-                <span class="label">Comunidade</span>
-                <span id="info-nome" class="value">—</span>
-            </div>
-
-            <div class="card">
-                <span class="label">População (IBGE)</span>
-                <span id="info-populacao" class="value">—</span>
-            </div>
-
-            <div class="card">
-                <span class="label">Domicílios (IBGE)</span>
-                <span id="info-domicilios" class="value">—</span>
-            </div>
-
-            <div class="card">
-                <span class="label">Área (km²)</span>
-                <span id="info-area" class="value">—</span>
-            </div>
+            <div class="card"><span>Comunidade</span><strong id="info-nome">—</strong></div>
+            <div class="card"><span>População</span><strong id="info-populacao">—</strong></div>
+            <div class="card"><span>Domicílios</span><strong id="info-domicilios">—</strong></div>
+            <div class="card"><span>Área (km²)</span><strong id="info-area">—</strong></div>
         </div>
 
         <div id="map"></div>
-    </div>
+
+    </main>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="{{ url_for('static', filename='js/mapa.js') }}"></script>
 </body>
 </html>

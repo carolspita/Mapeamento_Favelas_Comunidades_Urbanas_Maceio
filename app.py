@@ -1,37 +1,55 @@
 from flask import Flask, render_template, jsonify
-import json
 import os
+import json
 import pandas as pd
 
 app = Flask(__name__)
 
+# ===============================
+# CAMINHOS BASE
+# ===============================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DADOS_DIR = os.path.join(BASE_DIR, "dados")
+DATA_DIR = os.path.join(BASE_DIR, "data")
 
-AREAS_GEOJSON = os.path.join(DADOS_DIR, "areas.geojson")
-POPULACAO_XLSX = os.path.join(DADOS_DIR, "populacao.xlsx")
-DOMICILIOS_XLSX = os.path.join(DADOS_DIR, "domicilios.xlsx")
-AREA_XLSX = os.path.join(DADOS_DIR, "area_km2.xlsx")
+AREAS_GEOJSON = os.path.join(DATA_DIR, "areas.geojson")
+ABAIRRAMENTO_GEOJSON = os.path.join(DATA_DIR, "Abairramento_Maceio.geojson")
+
+POPULACAO_XLSX = os.path.join(DATA_DIR, "populacao.xlsx")
+DOMICILIOS_XLSX = os.path.join(DATA_DIR, "domicilios.xlsx")
+AREA_XLSX = os.path.join(DATA_DIR, "area_km2.xlsx")
+
+
+# ===============================
+# FUNÇÕES AUXILIARES
+# ===============================
+def carregar_geojson(path):
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Arquivo não encontrado: {path}")
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
 
 
 def carregar_tabela(path, coluna_valor):
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Arquivo não encontrado: {path}")
+
     df = pd.read_excel(path)
-    df = df.rename(columns=lambda x: x.strip())
-    return dict(zip(df["cd_fcu"], df[coluna_valor]))
+    df.columns = df.columns.str.strip()
+
+    return dict(zip(df["cd_fcu"].astype(str), df[coluna_valor]))
 
 
+# ===============================
+# ROTAS
+# ===============================
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-@app.route("/geojson")
-def geojson():
-    if not os.path.exists(AREAS_GEOJSON):
-        raise FileNotFoundError(f"Arquivo não encontrado: {AREAS_GEOJSON}")
-
-    with open(AREAS_GEOJSON, encoding="utf-8") as f:
-        areas = json.load(f)
+@app.route("/geojson/areas")
+def geojson_areas():
+    areas = carregar_geojson(AREAS_GEOJSON)
 
     pop = carregar_tabela(
         POPULACAO_XLSX,
@@ -47,7 +65,7 @@ def geojson():
     )
 
     for feature in areas["features"]:
-        cd = feature["properties"].get("cd_fcu")
+        cd = str(feature["properties"].get("cd_fcu"))
 
         feature["properties"]["populacao"] = pop.get(cd)
         feature["properties"]["domicilios"] = dom.get(cd)
@@ -56,5 +74,13 @@ def geojson():
     return jsonify(areas)
 
 
+@app.route("/geojson/abairramento")
+def geojson_abairramento():
+    return jsonify(carregar_geojson(ABAIRRAMENTO_GEOJSON))
+
+
+# ===============================
+# START
+# ===============================
 if __name__ == "__main__":
     app.run(debug=True)
