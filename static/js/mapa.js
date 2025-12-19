@@ -29,7 +29,7 @@ const estiloAbairramento = {
 };
 
 // ===============================
-// ÁREAS (COMUNIDADES)
+// ÁREAS FCU
 // ===============================
 fetch("/geojson/areas")
     .then(r => r.json())
@@ -37,10 +37,21 @@ fetch("/geojson/areas")
 
         areasLayer = L.geoJSON(data, {
             style: estiloAreas,
+
             onEachFeature: (feature, layer) => {
                 const p = feature.properties;
 
                 layer.bindTooltip(p.nm_fcu || "Sem nome");
+
+                layer.on("mouseover", () => {
+                    layer.setStyle({ color: "#f97316", weight: 3, fillOpacity: 0.6 });
+                });
+
+                layer.on("mouseout", () => {
+                    if (camadaSelecionada !== layer) {
+                        areasLayer.resetStyle(layer);
+                    }
+                });
 
                 layer.on("click", () => {
                     if (camadaSelecionada) {
@@ -61,7 +72,6 @@ fetch("/geojson/areas")
             }
         }).addTo(map);
 
-        // SELECT
         const select = document.getElementById("areaSelect");
         data.features.forEach((f, i) => {
             const opt = document.createElement("option");
@@ -77,8 +87,9 @@ fetch("/geojson/areas")
         });
     });
 
+
 // ===============================
-// ABAIRRAMENTO (BOTÃO)
+// ABAIRRAMENTO
 // ===============================
 document.getElementById("btnAbairramento").addEventListener("click", () => {
 
@@ -86,9 +97,28 @@ document.getElementById("btnAbairramento").addEventListener("click", () => {
         fetch("/geojson/abairramento")
             .then(r => r.json())
             .then(data => {
+
                 abairramentoLayer = L.geoJSON(data, {
-                    style: estiloAbairramento
+                    style: estiloAbairramento,
+
+                    onEachFeature: (feature, layer) => {
+                        const nomeBairro =
+                            feature.properties.BAIRRO ||
+                            feature.properties.bairro ||
+                            "Bairro não identificado";
+
+                        layer.bindTooltip(nomeBairro);
+
+                        layer.on("mouseover", () => {
+                            layer.setStyle({ color: "#b91c1c", weight: 3 });
+                        });
+
+                        layer.on("mouseout", () => {
+                            abairramentoLayer.resetStyle(layer);
+                        });
+                    }
                 }).addTo(map);
+
                 abairramentoVisivel = true;
             });
     } else {
@@ -101,6 +131,7 @@ document.getElementById("btnAbairramento").addEventListener("click", () => {
     }
 });
 
+
 // ===============================
 // GROTAS
 // ===============================
@@ -109,6 +140,7 @@ document.getElementById("btnGrotaNoGrau").addEventListener("click", () => {
     areasLayer.eachLayer(l => areasLayer.resetStyle(l));
 });
 
+
 // ===============================
 // LIMPAR
 // ===============================
@@ -116,13 +148,24 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
     filtroGrotaAtivo = false;
     camadaSelecionada = null;
 
+    // Resetar estilo das áreas
     areasLayer.eachLayer(l => areasLayer.resetStyle(l));
 
+    // Resetar zoom
     map.setView([-9.6498, -35.7089], 12);
 
+    // Resetar select
     document.getElementById("areaSelect").value = "";
+
+    // Resetar cards
     document.getElementById("info-nome").innerText = "—";
     document.getElementById("info-populacao").innerText = "—";
     document.getElementById("info-domicilios").innerText = "—";
     document.getElementById("info-area").innerText = "—";
+
+    // 🔴 Remover camada de abairramento caso esteja ativa
+    if (abairramentoLayer && abairramentoVisivel) {
+        map.removeLayer(abairramentoLayer);
+        abairramentoVisivel = false;
+    }
 });

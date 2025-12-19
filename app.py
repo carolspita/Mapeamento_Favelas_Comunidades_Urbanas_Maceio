@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify
 import os
 import json
 import pandas as pd
+import geopandas as gpd
 
 app = Flask(__name__)
 
@@ -49,29 +50,46 @@ def index():
 
 @app.route("/geojson/areas")
 def geojson_areas():
-    areas = carregar_geojson(AREAS_GEOJSON)
 
+    # ---------- Carrega GeoJSONs em GeoDataFrame ----------
+    areas_gdf = gpd.read_file(AREAS_GEOJSON)
+    bairros_gdf = gpd.read_file(ABAIRRAMENTO_GEOJSON)
+
+    # Garante sistema de coordenadas igual
+    if areas_gdf.crs != bairros_gdf.crs:
+        bairros_gdf = bairros_gdf.to_crs(areas_gdf.crs)
+
+    # ---------- Filtra áreas que estão dentro dos bairros ----------
+    areas_gdf = gpd.overlay(areas_gdf, bairros_gdf, how="intersection")
+
+    # ---------- Carrega tabelas ----------
     pop = carregar_tabela(
         POPULACAO_XLSX,
         "População residente em favelas e comunidades urbanas (Pessoas)"
     )
+
     dom = carregar_tabela(
         DOMICILIOS_XLSX,
         "Domicílios em favelas e comunidades urbanas (Domicílios)"
     )
+
     area = carregar_tabela(
         AREA_XLSX,
         "Área territorial de favelas e comunidades urbanas (Quilômetros quadrados)"
     )
 
-    for feature in areas["features"]:
-        cd = str(feature["properties"].get("cd_fcu"))
+    # ---------- Adiciona atributos ----------
+    def add_values(row):
+        cd = str(row.get("cd_fcu"))
+        row["populacao"] = pop.get(cd)
+        row["domicilios"] = dom.get(cd)
+        row["area_km2"] = area.get(cd)
+        return row
 
-        feature["properties"]["populacao"] = pop.get(cd)
-        feature["properties"]["domicilios"] = dom.get(cd)
-        feature["properties"]["area_km2"] = area.get(cd)
+    areas_gdf = areas_gdf.apply(add_values, axis=1)
 
-    return jsonify(areas)
+    # ---------- Retorna GeoJSON ----------
+    return jsonify(json.loads(areas_gdf.to_json()))
 
 
 @app.route("/geojson/abairramento")
