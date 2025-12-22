@@ -51,16 +51,24 @@ def index():
 @app.route("/geojson/areas")
 def geojson_areas():
 
-    # ---------- Carrega GeoJSONs em GeoDataFrame ----------
+    # ---------- Carrega GeoJSON em GeoDataFrame ----------
     areas_gdf = gpd.read_file(AREAS_GEOJSON)
     bairros_gdf = gpd.read_file(ABAIRRAMENTO_GEOJSON)
 
-    # Garante sistema de coordenadas igual
+    # ---------- Garante mesmo sistema de coordenadas ----------
     if areas_gdf.crs != bairros_gdf.crs:
         bairros_gdf = bairros_gdf.to_crs(areas_gdf.crs)
 
-    # ---------- Filtra áreas que estão dentro dos bairros ----------
-    areas_gdf = gpd.overlay(areas_gdf, bairros_gdf, how="intersection")
+    # ---------- Seleciona áreas que INTERSECTAM abairramento ----------
+    # IMPORTANTE → NÃO RECORTA MAIS, apenas filtra
+    filtradas = gpd.sjoin(
+        areas_gdf,
+        bairros_gdf[["geometry"]],
+        predicate="intersects",
+        how="inner"
+    )
+
+    filtradas = filtradas.drop(columns=["index_right"], errors="ignore")
 
     # ---------- Carrega tabelas ----------
     pop = carregar_tabela(
@@ -86,17 +94,31 @@ def geojson_areas():
         row["area_km2"] = area.get(cd)
         return row
 
-    areas_gdf = areas_gdf.apply(add_values, axis=1)
+    filtradas = filtradas.apply(add_values, axis=1)
 
     # ---------- Retorna GeoJSON ----------
-    return jsonify(json.loads(areas_gdf.to_json()))
+    return jsonify(json.loads(filtradas.to_json()))
 
 
 @app.route("/geojson/abairramento")
 def geojson_abairramento():
     return jsonify(carregar_geojson(ABAIRRAMENTO_GEOJSON))
 
+@app.route("/geojson/cras")
+def geojson_cras():
+    return jsonify(carregar_geojson(os.path.join(DATA_DIR, "CRAS.geojson")))
 
+@app.route("/geojson/escolasmunicipais")
+def geojson_escolasmunicipais():
+    return jsonify(carregar_geojson(os.path.join(DATA_DIR, "escolasmunicipais.geojson")))
+
+@app.route("/geojson/creas")
+def geojson_creas():
+    return jsonify(carregar_geojson(os.path.join(DATA_DIR, "CREAS.geojson")))
+
+@app.route("/geojson/restaurantepopular")
+def geojson_restaurantepopular():
+    return jsonify(carregar_geojson(os.path.join(DATA_DIR, "restaurantepopular.geojson")))
 # ===============================
 # START
 # ===============================
