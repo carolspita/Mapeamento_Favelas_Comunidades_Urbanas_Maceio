@@ -1,8 +1,43 @@
-const map = L.map("map").setView([-9.6498, -35.7089], 12);
+const map = L.map("map", {
+    center: [-9.6498, -35.7089],
+    zoom: 12
+});
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap"
-}).addTo(map);
+// ===============================
+// CAMADAS BASE
+// ===============================
+const baseOSM = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    { attribution: "© OpenStreetMap" }
+).addTo(map);
+
+const baseEsri = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { attribution: "Tiles © Esri" }
+);
+
+const baseGoogle = L.tileLayer(
+    "http://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+    { attribution: "Google" }
+);
+
+const baseCarto = L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    { attribution: "© CARTO" }
+);
+
+// ===============================
+// CONTROLE
+// ===============================
+const baseMaps = {
+    "🗺️ Mapa Padrão": baseOSM,
+    "🌎 Satélite ESRI": baseEsri,
+    "🛰️ Google Satélite": baseGoogle,
+    "📖 Carto Claro": baseCarto
+};
+
+L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
+
 
 let areasLayer = null;
 let abairramentoLayer = null;
