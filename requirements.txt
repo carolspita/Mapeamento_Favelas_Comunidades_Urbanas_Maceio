@@ -1,3 +1,8 @@
 Flask
 gunicorn
 pandas
+openpyxl
+geopandas
+shapely
+fiona
+pyproj
