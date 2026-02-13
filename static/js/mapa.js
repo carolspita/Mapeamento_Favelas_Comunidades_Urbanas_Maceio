@@ -117,16 +117,33 @@ fetch("/geojson/areas")
         }).addTo(map);
 
         const select = document.getElementById("areaSelect");
-        data.features.forEach((f, i) => {
+
+        // monta lista de nomes únicos
+        const nomesUnicos = [...new Set(
+            data.features
+                .map(f => f.properties.nm_fcu)
+                .filter(n => n && n.trim() !== "")
+        )].sort((a, b) => a.localeCompare(b));
+
+        nomesUnicos.forEach(nome => {
             const opt = document.createElement("option");
-            opt.value = i;
-            opt.textContent = f.properties.nm_fcu;
+            opt.value = nome;        // agora o value é o NOME
+            opt.textContent = nome;
             select.appendChild(opt);
         });
 
         select.addEventListener("change", e => {
-            if (e.target.value !== "") {
-                areasLayer.getLayers()[e.target.value].fire("click");
+
+            const nome = e.target.value;
+            if (!nome) return;
+
+            // procura a PRIMEIRA feature com esse nome
+            const layer = areasLayer
+                .getLayers()
+                .find(l => l.feature.properties.nm_fcu === nome);
+
+            if (layer) {
+                layer.fire("click");
             }
         });
     });
