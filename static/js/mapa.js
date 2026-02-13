@@ -4,6 +4,32 @@ const map = L.map("map", {
 });
 
 // ===============================
+// BARRA DE PESQUISA (ENDEREÇOS)
+// ===============================
+const geocoder = L.Control.geocoder({
+    geocoder: L.Control.Geocoder.nominatim({
+        geocodingQueryParams: {
+            countrycodes: "br",
+            viewbox: "-35.85,-9.75,-35.60,-9.45",
+            bounded: 1
+        }
+    }),
+    placeholder: "Buscar rua, bairro ou local...",
+    defaultMarkGeocode: false
+})
+.on("markgeocode", function (e) {
+
+    map.fitBounds(e.geocode.bbox);
+
+    L.marker(e.geocode.center)
+        .addTo(map)
+        .bindPopup(e.geocode.name)
+        .openPopup();
+})
+.addTo(map);
+
+
+// ===============================
 // CAMADAS BASE
 // ===============================
 const baseOSM = L.tileLayer(
@@ -26,9 +52,6 @@ const baseCarto = L.tileLayer(
     { attribution: "© CARTO" }
 );
 
-// ===============================
-// CONTROLE
-// ===============================
 const baseMaps = {
     "🗺️ Mapa Padrão": baseOSM,
     "🌎 Satélite ESRI": baseEsri,
@@ -39,22 +62,30 @@ const baseMaps = {
 L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 
 
+// ===============================
+// VARIÁVEIS
+// ===============================
 let areasLayer = null;
 let abairramentoLayer = null;
 let camadaSelecionada = null;
+
 let filtroGrotaAtivo = false;
 let abairramentoVisivel = false;
+
 let crasLayer = null;
 let crasVisivel = false;
+
 let escolasmunicipaisLayer = null;
 let escolasmunicipaisVisivel = false;
+
 let creasLayer = null;
 let creasVisivel = false;
+
 let restaurantepopularLayer = null;
 let restaurantepopularVisivel = false;
 
-
 const areasGrota = ["Vale do Reginaldo", "Recanto Nabal"];
+
 
 // ===============================
 // ESTILOS
@@ -72,6 +103,7 @@ const estiloAbairramento = {
     fillOpacity: 0
 };
 
+
 // ===============================
 // ÁREAS FCU
 // ===============================
@@ -83,6 +115,7 @@ fetch("/geojson/areas")
             style: estiloAreas,
 
             onEachFeature: (feature, layer) => {
+
                 const p = feature.properties;
 
                 layer.bindTooltip(p.nm_fcu || "Sem nome");
@@ -98,11 +131,13 @@ fetch("/geojson/areas")
                 });
 
                 layer.on("click", () => {
+
                     if (camadaSelecionada) {
                         areasLayer.resetStyle(camadaSelecionada);
                     }
 
                     camadaSelecionada = layer;
+
                     layer.setStyle({ color: "#f97316", weight: 3 });
 
                     map.fitBounds(layer.getBounds(), { padding: [20, 20] });
@@ -111,39 +146,72 @@ fetch("/geojson/areas")
                     document.getElementById("info-populacao").innerText = p.populacao ?? "—";
                     document.getElementById("info-domicilios").innerText = p.domicilios ?? "—";
                     document.getElementById("info-area").innerText =
-                        p.area_km2 ? `${p.area_km2.toFixed(2)} km²` : "—";
+                        p.area_km2 ? `${Number(p.area_km2).toFixed(2)} km²` : "—";
                 });
             }
         }).addTo(map);
 
+
+        // ===============================
+        // SELECT SEM DUPLICAR COMUNIDADES
+        // ===============================
         const select = document.getElementById("areaSelect");
 
-        // monta lista de nomes únicos
-        const nomesUnicos = [...new Set(
-            data.features
-                .map(f => f.properties.nm_fcu)
-                .filter(n => n && n.trim() !== "")
-        )].sort((a, b) => a.localeCompare(b));
+        select.innerHTML = '<option value="">Selecione uma área</option>';
 
-        nomesUnicos.forEach(nome => {
-            const opt = document.createElement("option");
-            opt.value = nome;        // agora o value é o NOME
-            opt.textContent = nome;
-            select.appendChild(opt);
+        const nomesUnicos = new Set();
+
+        areasLayer.eachLayer(layer => {
+            const nome = layer.feature?.properties?.nm_fcu;
+            if (nome) nomesUnicos.add(nome);
         });
+
+        [...nomesUnicos]
+            .sort((a, b) => a.localeCompare(b))
+            .forEach(nome => {
+                const opt = document.createElement("option");
+                opt.value = nome;
+                opt.textContent = nome;
+                select.appendChild(opt);
+            });
+
 
         select.addEventListener("change", e => {
 
-            const nome = e.target.value;
-            if (!nome) return;
+            const nomeSelecionado = e.target.value;
 
-            // procura a PRIMEIRA feature com esse nome
-            const layer = areasLayer
-                .getLayers()
-                .find(l => l.feature.properties.nm_fcu === nome);
+            if (!nomeSelecionado) return;
 
-            if (layer) {
-                layer.fire("click");
+            let bounds = null;
+
+            areasLayer.eachLayer(layer => {
+
+                const nome = layer.feature?.properties?.nm_fcu;
+
+                if (nome === nomeSelecionado) {
+
+                    if (!bounds) bounds = layer.getBounds();
+                    else bounds.extend(layer.getBounds());
+
+                    if (camadaSelecionada) {
+                        areasLayer.resetStyle(camadaSelecionada);
+                    }
+
+                    camadaSelecionada = layer;
+                    layer.setStyle({ color: "#f97316", weight: 3 });
+
+                    const p = layer.feature.properties;
+
+                    document.getElementById("info-nome").innerText = p.nm_fcu || "—";
+                    document.getElementById("info-populacao").innerText = p.populacao ?? "—";
+                    document.getElementById("info-domicilios").innerText = p.domicilios ?? "—";
+                    document.getElementById("info-area").innerText =
+                        p.area_km2 ? `${Number(p.area_km2).toFixed(2)} km²` : "—";
+                }
+            });
+
+            if (bounds) {
+                map.fitBounds(bounds, { padding: [20, 20] });
             }
         });
     });
@@ -155,6 +223,7 @@ fetch("/geojson/areas")
 document.getElementById("btnAbairramento").addEventListener("click", () => {
 
     if (!abairramentoLayer) {
+
         fetch("/geojson/abairramento")
             .then(r => r.json())
             .then(data => {
@@ -163,6 +232,7 @@ document.getElementById("btnAbairramento").addEventListener("click", () => {
                     style: estiloAbairramento,
 
                     onEachFeature: (feature, layer) => {
+
                         const nomeBairro =
                             feature.properties.BAIRRO ||
                             feature.properties.bairro ||
@@ -182,12 +252,12 @@ document.getElementById("btnAbairramento").addEventListener("click", () => {
 
                 abairramentoVisivel = true;
             });
+
     } else {
-        if (abairramentoVisivel) {
-            map.removeLayer(abairramentoLayer);
-        } else {
-            abairramentoLayer.addTo(map);
-        }
+
+        if (abairramentoVisivel) map.removeLayer(abairramentoLayer);
+        else abairramentoLayer.addTo(map);
+
         abairramentoVisivel = !abairramentoVisivel;
     }
 });
@@ -203,240 +273,174 @@ document.getElementById("btnGrotaNoGrau").addEventListener("click", () => {
 
 
 // ===============================
-// CAMADA DE CRAS
+// CRAS
 // ===============================
-
 document.getElementById("btnCRAS").addEventListener("click", () => {
 
     if (!crasLayer) {
+
         fetch("/geojson/cras")
             .then(r => r.json())
             .then(data => {
 
                 crasLayer = L.geoJSON(data, {
-                    pointToLayer: (feature, latlng) => {
-
-                    const googleMarker = L.icon({
-                        iconUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-icon.png",
-                        shadowUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-shadow.png",
-                        iconSize: [28, 45],
-                        iconAnchor: [14, 45],
-                        popupAnchor: [0, -38],
-                        shadowSize: [45, 45]
-                    });
-
-                    return L.marker(latlng, { icon: googleMarker });
-                },
-
+                    pointToLayer: (feature, latlng) => L.marker(latlng),
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties || {};
-                        const nome = props.NOME || props.Nome || props.name || "CRAS";
-
-                        layer.bindTooltip(nome, { permanent: false });
+                        layer.bindTooltip(props.NOME || props.Nome || props.name || "CRAS");
                     }
                 }).addTo(map);
 
                 crasVisivel = true;
             });
+
     } else {
-        if (crasVisivel) {
-            map.removeLayer(crasLayer);
-        } else {
-            crasLayer.addTo(map);
-        }
+
+        if (crasVisivel) map.removeLayer(crasLayer);
+        else crasLayer.addTo(map);
 
         crasVisivel = !crasVisivel;
     }
 });
-// ===============================
-// CAMADA DE ESCOLAS MUNICIPAIS
-// ===============================
 
+
+// ===============================
+// ESCOLAS
+// ===============================
 document.getElementById("btnEscolasMunicipais").addEventListener("click", () => {
 
     if (!escolasmunicipaisLayer) {
+
         fetch("/geojson/escolasmunicipais")
             .then(r => r.json())
             .then(data => {
 
                 escolasmunicipaisLayer = L.geoJSON(data, {
-                    pointToLayer: (feature, latlng) => {
-
-                    const googleMarker = L.icon({
-                        iconUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-icon.png",
-                        shadowUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-shadow.png",
-                        iconSize: [28, 45],
-                        iconAnchor: [14, 45],
-                        popupAnchor: [0, -38],
-                        shadowSize: [45, 45]
-                    });
-
-                    return L.marker(latlng, { icon: googleMarker });
-                },
-
+                    pointToLayer: (feature, latlng) => L.marker(latlng),
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties || {};
-                        const nome = props.NOME || props.Nome || props.name || "ESCOLA";
-
-                        layer.bindTooltip(nome, { permanent: false });
+                        layer.bindTooltip(props.NOME || props.Nome || props.name || "Escola");
                     }
                 }).addTo(map);
 
                 escolasmunicipaisVisivel = true;
             });
+
     } else {
-        if (escolasmunicipaisVisivel) {
-            map.removeLayer(escolasmunicipaisLayer);
-        } else {
-            escolasmunicipaisLayer.addTo(map);
-        }
+
+        if (escolasmunicipaisVisivel) map.removeLayer(escolasmunicipaisLayer);
+        else escolasmunicipaisLayer.addTo(map);
 
         escolasmunicipaisVisivel = !escolasmunicipaisVisivel;
     }
 });
 
-// ============================================
-// CAMADA DE RESTAURANTES POPULARES
-// ============================================
 
+// ===============================
+// RESTAURANTES
+// ===============================
 document.getElementById("btnRestaurantePopular").addEventListener("click", () => {
 
     if (!restaurantepopularLayer) {
+
         fetch("/geojson/restaurantepopular")
             .then(r => r.json())
             .then(data => {
 
                 restaurantepopularLayer = L.geoJSON(data, {
-                    pointToLayer: (feature, latlng) => {
-
-                    const googleMarker = L.icon({
-                        iconUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-icon.png",
-                        shadowUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-shadow.png",
-                        iconSize: [28, 45],
-                        iconAnchor: [14, 45],
-                        popupAnchor: [0, -38],
-                        shadowSize: [45, 45]
-                    });
-
-                    return L.marker(latlng, { icon: googleMarker });
-                },
-
+                    pointToLayer: (feature, latlng) => L.marker(latlng),
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties || {};
-                        const nome = props.NOME || props.Nome || props.name || "ESCOLA";
-
-                        layer.bindTooltip(nome, { permanent: false });
+                        layer.bindTooltip(props.NOME || props.Nome || props.name || "Restaurante");
                     }
                 }).addTo(map);
 
                 restaurantepopularVisivel = true;
             });
+
     } else {
-        if (restaurantepopularVisivel) {
-            map.removeLayer(restaurantepopularLayer);
-        } else {
-            restaurantepopularLayer.addTo(map);
-        }
+
+        if (restaurantepopularVisivel) map.removeLayer(restaurantepopularLayer);
+        else restaurantepopularLayer.addTo(map);
 
         restaurantepopularVisivel = !restaurantepopularVisivel;
     }
 });
 
-// ===============================
-// CAMADA DE CREAS
-// ===============================
 
+// ===============================
+// CREAS
+// ===============================
 document.getElementById("btnCREAS").addEventListener("click", () => {
 
     if (!creasLayer) {
+
         fetch("/geojson/creas")
             .then(r => r.json())
             .then(data => {
 
                 creasLayer = L.geoJSON(data, {
-                    pointToLayer: (feature, latlng) => {
-
-                    const googleMarker = L.icon({
-                        iconUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-icon.png",
-                        shadowUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-shadow.png",
-                        iconSize: [28, 45],
-                        iconAnchor: [14, 45],
-                        popupAnchor: [0, -38],
-                        shadowSize: [45, 45]
-                    });
-
-                    return L.marker(latlng, { icon: googleMarker });
-                },
-
+                    pointToLayer: (feature, latlng) => L.marker(latlng),
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties || {};
-                        const nome = props.NOME || props.Nome || props.name || "CREAS";
-
-                        layer.bindTooltip(nome, { permanent: false });
+                        layer.bindTooltip(props.NOME || props.Nome || props.name || "CREAS");
                     }
                 }).addTo(map);
 
                 creasVisivel = true;
             });
+
     } else {
-        if (creasVisivel) {
-            map.removeLayer(creasLayer);
-        } else {
-            creasLayer.addTo(map);
-        }
+
+        if (creasVisivel) map.removeLayer(creasLayer);
+        else creasLayer.addTo(map);
 
         creasVisivel = !creasVisivel;
     }
 });
 
+
 // ===============================
 // LIMPAR
 // ===============================
 document.getElementById("btnLimparFiltros").addEventListener("click", () => {
+
     filtroGrotaAtivo = false;
     camadaSelecionada = null;
 
-    // Resetar estilo das áreas
     areasLayer.eachLayer(l => areasLayer.resetStyle(l));
 
-    // Resetar zoom
     map.setView([-9.6498, -35.7089], 12);
 
-    // Resetar select
     document.getElementById("areaSelect").value = "";
 
-    // Resetar cards
     document.getElementById("info-nome").innerText = "—";
     document.getElementById("info-populacao").innerText = "—";
     document.getElementById("info-domicilios").innerText = "—";
     document.getElementById("info-area").innerText = "—";
 
-    // 🔴 Remover camada de abairramento caso esteja ativa
     if (abairramentoLayer && abairramentoVisivel) {
         map.removeLayer(abairramentoLayer);
         abairramentoVisivel = false;
     }
 
-    // 🔴 Remover camada de CRAS caso esteja ativa
     if (crasLayer && crasVisivel) {
-    map.removeLayer(crasLayer);
-    crasVisivel = false;
+        map.removeLayer(crasLayer);
+        crasVisivel = false;
     }
-    // 🔴 Remover camada de ESCOLAS MUNICIPAIS caso esteja ativa
+
     if (escolasmunicipaisLayer && escolasmunicipaisVisivel) {
-    map.removeLayer(escolasmunicipaisLayer);
-    escolasmunicipaisVisivel = false;
+        map.removeLayer(escolasmunicipaisLayer);
+        escolasmunicipaisVisivel = false;
     }
 
-    // 🔴 Remover camada de CRAS caso esteja ativa
     if (creasLayer && creasVisivel) {
-    map.removeLayer(creasLayer);
-    creasVisivel = false;
+        map.removeLayer(creasLayer);
+        creasVisivel = false;
     }
 
-    // 🔴 Remover camada de CRAS caso esteja ativa
     if (restaurantepopularLayer && restaurantepopularVisivel) {
-    map.removeLayer(restaurantepopularLayer);
-    restaurantepopularVisivel = false;
+        map.removeLayer(restaurantepopularLayer);
+        restaurantepopularVisivel = false;
     }
 });

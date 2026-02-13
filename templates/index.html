@@ -4,7 +4,18 @@
     <meta charset="UTF-8">
     <title>Mapa de Comunidades – Maceió</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Geocoder -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
+    />
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -27,8 +38,6 @@
         <button id="btnCREAS">Mostrar CREAS</button>
         <button id="btnRestaurantePopular">Mostrar Restaurantes Populares</button>
         <button id="btnLimparFiltros">Limpar filtros</button>
-        
-
     </aside>
 
     <main id="map-container">
@@ -45,7 +54,12 @@
     </main>
 </div>
 
+<!-- Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Geocoder -->
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
 <script src="{{ url_for('static', filename='js/mapa.js') }}"></script>
 </body>
 </html>
