@@ -3,6 +3,8 @@ const map = L.map("map", {
     zoom: 12
 });
 
+let marcadorBusca = null;
+
 // ===============================
 // BARRA DE PESQUISA (ENDEREÇOS)
 // ===============================
@@ -19,9 +21,13 @@ const geocoder = L.Control.geocoder({
 })
 .on("markgeocode", function (e) {
 
+    if (marcadorBusca) {
+        map.removeLayer(marcadorBusca);
+    }
+
     map.fitBounds(e.geocode.bbox);
 
-    L.marker(e.geocode.center)
+    marcadorBusca = L.marker(e.geocode.center)
         .addTo(map)
         .bindPopup(e.geocode.name)
         .openPopup();
@@ -52,6 +58,10 @@ const baseCarto = L.tileLayer(
     { attribution: "© CARTO" }
 );
 
+
+// ===============================
+// CONTROLE
+// ===============================
 const baseMaps = {
     "🗺️ Mapa Padrão": baseOSM,
     "🌎 Satélite ESRI": baseEsri,
@@ -68,7 +78,6 @@ L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 let areasLayer = null;
 let abairramentoLayer = null;
 let camadaSelecionada = null;
-
 let filtroGrotaAtivo = false;
 let abairramentoVisivel = false;
 
@@ -91,9 +100,11 @@ const areasGrota = ["Vale do Reginaldo", "Recanto Nabal"];
 // ESTILOS
 // ===============================
 function estiloAreas(feature) {
+
     if (filtroGrotaAtivo && areasGrota.includes(feature.properties.nm_fcu)) {
         return { color: "#dc2626", weight: 3, fillOpacity: 0.6 };
     }
+
     return { color: "#2563eb", weight: 2, fillOpacity: 0.4 };
 }
 
@@ -116,7 +127,7 @@ fetch("/geojson/areas")
 
             onEachFeature: (feature, layer) => {
 
-                const p = feature.properties;
+                const p = feature.properties || {};
 
                 layer.bindTooltip(p.nm_fcu || "Sem nome");
 
@@ -153,67 +164,50 @@ fetch("/geojson/areas")
 
 
         // ===============================
-        // SELECT SEM DUPLICAR COMUNIDADES
+        // SELECT SEM DUPLICAR NOMES
         // ===============================
         const select = document.getElementById("areaSelect");
-
         select.innerHTML = '<option value="">Selecione uma área</option>';
 
-        const nomesUnicos = new Set();
+        const mapaComunidades = new Map();
 
         areasLayer.eachLayer(layer => {
+
             const nome = layer.feature?.properties?.nm_fcu;
-            if (nome) nomesUnicos.add(nome);
+
+            if (!nome) return;
+
+            if (!mapaComunidades.has(nome)) {
+                mapaComunidades.set(nome, layer);
+            }
+
         });
 
-        [...nomesUnicos]
+        [...mapaComunidades.keys()]
             .sort((a, b) => a.localeCompare(b))
             .forEach(nome => {
+
                 const opt = document.createElement("option");
                 opt.value = nome;
                 opt.textContent = nome;
                 select.appendChild(opt);
-            });
 
+            });
 
         select.addEventListener("change", e => {
 
-            const nomeSelecionado = e.target.value;
+            const nome = e.target.value;
 
-            if (!nomeSelecionado) return;
+            if (!nome) return;
 
-            let bounds = null;
+            const layer = mapaComunidades.get(nome);
 
-            areasLayer.eachLayer(layer => {
-
-                const nome = layer.feature?.properties?.nm_fcu;
-
-                if (nome === nomeSelecionado) {
-
-                    if (!bounds) bounds = layer.getBounds();
-                    else bounds.extend(layer.getBounds());
-
-                    if (camadaSelecionada) {
-                        areasLayer.resetStyle(camadaSelecionada);
-                    }
-
-                    camadaSelecionada = layer;
-                    layer.setStyle({ color: "#f97316", weight: 3 });
-
-                    const p = layer.feature.properties;
-
-                    document.getElementById("info-nome").innerText = p.nm_fcu || "—";
-                    document.getElementById("info-populacao").innerText = p.populacao ?? "—";
-                    document.getElementById("info-domicilios").innerText = p.domicilios ?? "—";
-                    document.getElementById("info-area").innerText =
-                        p.area_km2 ? `${Number(p.area_km2).toFixed(2)} km²` : "—";
-                }
-            });
-
-            if (bounds) {
-                map.fitBounds(bounds, { padding: [20, 20] });
+            if (layer) {
+                layer.fire("click");
             }
+
         });
+
     });
 
 
@@ -255,8 +249,11 @@ document.getElementById("btnAbairramento").addEventListener("click", () => {
 
     } else {
 
-        if (abairramentoVisivel) map.removeLayer(abairramentoLayer);
-        else abairramentoLayer.addTo(map);
+        if (abairramentoVisivel) {
+            map.removeLayer(abairramentoLayer);
+        } else {
+            abairramentoLayer.addTo(map);
+        }
 
         abairramentoVisivel = !abairramentoVisivel;
     }
@@ -267,9 +264,53 @@ document.getElementById("btnAbairramento").addEventListener("click", () => {
 // GROTAS
 // ===============================
 document.getElementById("btnGrotaNoGrau").addEventListener("click", () => {
+
     filtroGrotaAtivo = !filtroGrotaAtivo;
+
     areasLayer.eachLayer(l => areasLayer.resetStyle(l));
+
 });
+
+
+// ===============================
+// FUNÇÃO GENÉRICA DE MARCADOR
+// ===============================
+function criarLayerPontos(url, tooltipPadrao, callbackSetLayer) {
+
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+
+            const layer = L.geoJSON(data, {
+
+                pointToLayer: (feature, latlng) => {
+
+                    const icon = L.icon({
+                        iconUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-icon.png",
+                        shadowUrl: "https://unpkg.com/leaflet@1.9/dist/images/marker-shadow.png",
+                        iconSize: [28, 45],
+                        iconAnchor: [14, 45],
+                        popupAnchor: [0, -38],
+                        shadowSize: [45, 45]
+                    });
+
+                    return L.marker(latlng, { icon });
+                },
+
+                onEachFeature: (feature, layer) => {
+
+                    const props = feature.properties || {};
+                    const nome = props.NOME || props.Nome || props.name || tooltipPadrao;
+
+                    layer.bindTooltip(nome);
+                }
+
+            }).addTo(map);
+
+            callbackSetLayer(layer);
+
+        });
+}
 
 
 // ===============================
@@ -279,20 +320,10 @@ document.getElementById("btnCRAS").addEventListener("click", () => {
 
     if (!crasLayer) {
 
-        fetch("/geojson/cras")
-            .then(r => r.json())
-            .then(data => {
-
-                crasLayer = L.geoJSON(data, {
-                    pointToLayer: (feature, latlng) => L.marker(latlng),
-                    onEachFeature: (feature, layer) => {
-                        const props = feature.properties || {};
-                        layer.bindTooltip(props.NOME || props.Nome || props.name || "CRAS");
-                    }
-                }).addTo(map);
-
-                crasVisivel = true;
-            });
+        criarLayerPontos("/geojson/cras", "CRAS", layer => {
+            crasLayer = layer;
+            crasVisivel = true;
+        });
 
     } else {
 
@@ -305,26 +336,16 @@ document.getElementById("btnCRAS").addEventListener("click", () => {
 
 
 // ===============================
-// ESCOLAS
+// ESCOLAS MUNICIPAIS
 // ===============================
 document.getElementById("btnEscolasMunicipais").addEventListener("click", () => {
 
     if (!escolasmunicipaisLayer) {
 
-        fetch("/geojson/escolasmunicipais")
-            .then(r => r.json())
-            .then(data => {
-
-                escolasmunicipaisLayer = L.geoJSON(data, {
-                    pointToLayer: (feature, latlng) => L.marker(latlng),
-                    onEachFeature: (feature, layer) => {
-                        const props = feature.properties || {};
-                        layer.bindTooltip(props.NOME || props.Nome || props.name || "Escola");
-                    }
-                }).addTo(map);
-
-                escolasmunicipaisVisivel = true;
-            });
+        criarLayerPontos("/geojson/escolasmunicipais", "ESCOLA", layer => {
+            escolasmunicipaisLayer = layer;
+            escolasmunicipaisVisivel = true;
+        });
 
     } else {
 
@@ -337,58 +358,16 @@ document.getElementById("btnEscolasMunicipais").addEventListener("click", () => 
 
 
 // ===============================
-// RESTAURANTES
-// ===============================
-document.getElementById("btnRestaurantePopular").addEventListener("click", () => {
-
-    if (!restaurantepopularLayer) {
-
-        fetch("/geojson/restaurantepopular")
-            .then(r => r.json())
-            .then(data => {
-
-                restaurantepopularLayer = L.geoJSON(data, {
-                    pointToLayer: (feature, latlng) => L.marker(latlng),
-                    onEachFeature: (feature, layer) => {
-                        const props = feature.properties || {};
-                        layer.bindTooltip(props.NOME || props.Nome || props.name || "Restaurante");
-                    }
-                }).addTo(map);
-
-                restaurantepopularVisivel = true;
-            });
-
-    } else {
-
-        if (restaurantepopularVisivel) map.removeLayer(restaurantepopularLayer);
-        else restaurantepopularLayer.addTo(map);
-
-        restaurantepopularVisivel = !restaurantepopularVisivel;
-    }
-});
-
-
-// ===============================
 // CREAS
 // ===============================
 document.getElementById("btnCREAS").addEventListener("click", () => {
 
     if (!creasLayer) {
 
-        fetch("/geojson/creas")
-            .then(r => r.json())
-            .then(data => {
-
-                creasLayer = L.geoJSON(data, {
-                    pointToLayer: (feature, latlng) => L.marker(latlng),
-                    onEachFeature: (feature, layer) => {
-                        const props = feature.properties || {};
-                        layer.bindTooltip(props.NOME || props.Nome || props.name || "CREAS");
-                    }
-                }).addTo(map);
-
-                creasVisivel = true;
-            });
+        criarLayerPontos("/geojson/creas", "CREAS", layer => {
+            creasLayer = layer;
+            creasVisivel = true;
+        });
 
     } else {
 
@@ -396,6 +375,28 @@ document.getElementById("btnCREAS").addEventListener("click", () => {
         else creasLayer.addTo(map);
 
         creasVisivel = !creasVisivel;
+    }
+});
+
+
+// ===============================
+// RESTAURANTE POPULAR
+// ===============================
+document.getElementById("btnRestaurantePopular").addEventListener("click", () => {
+
+    if (!restaurantepopularLayer) {
+
+        criarLayerPontos("/geojson/restaurantepopular", "Restaurante", layer => {
+            restaurantepopularLayer = layer;
+            restaurantepopularVisivel = true;
+        });
+
+    } else {
+
+        if (restaurantepopularVisivel) map.removeLayer(restaurantepopularLayer);
+        else restaurantepopularLayer.addTo(map);
+
+        restaurantepopularVisivel = !restaurantepopularVisivel;
     }
 });
 
@@ -411,6 +412,11 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
     areasLayer.eachLayer(l => areasLayer.resetStyle(l));
 
     map.setView([-9.6498, -35.7089], 12);
+
+    if (marcadorBusca) {
+        map.removeLayer(marcadorBusca);
+        marcadorBusca = null;
+    }
 
     document.getElementById("areaSelect").value = "";
 
@@ -443,4 +449,5 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
         map.removeLayer(restaurantepopularLayer);
         restaurantepopularVisivel = false;
     }
+
 });
