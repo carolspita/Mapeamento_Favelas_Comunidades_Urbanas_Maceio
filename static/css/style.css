@@ -46,14 +46,6 @@ html, body {
     gap: 14px;
 }
 
-/* CAIXA BRANCA DA LOGO (para não “apagar” a logo) */
-.topbar-logo-box {
-    background: #ffffff;
-    padding: 6px 10px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-}
 
 /* Logo horizontal */
 .topbar-logo {
