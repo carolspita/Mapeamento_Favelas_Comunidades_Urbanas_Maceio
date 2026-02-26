@@ -39,23 +39,19 @@ html, body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
-/* Agrupa logo + textos */
 .topbar-brand {
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
-
-/* Logo horizontal */
 .topbar-logo {
-    max-height: 70px;   /* acompanha o header de 100px */
+    max-height: 70px;
     width: auto;
     object-fit: contain;
     display: block;
 }
 
-/* Textos do header */
 .topbar-texts {
     display: flex;
     flex-direction: column;
@@ -72,7 +68,7 @@ html, body {
 
 .topbar-subtitle {
     font-size: 12px;
-    opacity: .9; /* somente o subtítulo */
+    opacity: .9;
 }
 
 /* =====================================================
@@ -81,7 +77,7 @@ html, body {
 
 #container {
     display: flex;
-    height: calc(100vh - 110px); /* acompanha a altura real do header */
+    height: calc(100vh - 110px);
 }
 
 /* =====================================================
@@ -116,6 +112,9 @@ html, body {
     border: 1px solid #cbd5e1;
     background: #ffffff;
     font-size: 13px;
+
+    /* >>> CORREÇÃO: evita estourar a largura da sidebar */
+    box-sizing: border-box;
 }
 
 /* Botões padrão */
@@ -130,13 +129,11 @@ html, body {
     transition: all .15s ease;
 }
 
-/* Hover */
 .sidebar-button:hover {
     background: #e0edff;
     border-color: var(--azul-claro-iplam);
 }
 
-/* Botão limpar filtros */
 .sidebar-button-danger {
     margin-top: 8px;
     background: #fff4ec;

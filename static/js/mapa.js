@@ -208,6 +208,35 @@ fetch("/geojson/areas")
 
         });
 
+
+        // ===============================
+        // BUSCA DE COMUNIDADE (FILTRO DO SELECT)
+        // ===============================
+        const inputBusca = document.getElementById("areaSearch");
+
+        function atualizarSelectComFiltro(filtroTexto) {
+
+            select.innerHTML = '<option value="">Selecione uma área</option>';
+
+            const texto = filtroTexto.toLowerCase();
+
+            [...mapaComunidades.keys()]
+                .filter(nome => nome.toLowerCase().includes(texto))
+                .sort((a, b) => a.localeCompare(b))
+                .forEach(nome => {
+
+                    const opt = document.createElement("option");
+                    opt.value = nome;
+                    opt.textContent = nome;
+                    select.appendChild(opt);
+
+                });
+        }
+
+        inputBusca.addEventListener("input", e => {
+            atualizarSelectComFiltro(e.target.value);
+        });
+
     });
 
 
@@ -419,6 +448,15 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
     }
 
     document.getElementById("areaSelect").value = "";
+    document.getElementById("areaSearch").value = "";
+
+    /* >>> CORREÇÃO
+       força o filtro da barra a ser reexecutado
+       para reconstruir o select completo
+    */
+    document
+        .getElementById("areaSearch")
+        .dispatchEvent(new Event("input"));
 
     document.getElementById("info-nome").innerText = "—";
     document.getElementById("info-populacao").innerText = "—";
