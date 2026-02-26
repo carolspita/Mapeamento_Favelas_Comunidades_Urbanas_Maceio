@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Exemplo – Área de filtros</title>
+
+<style>
+:root{
+    --azul: #1b3f6f;
+    --cinza: #f2f4f7;
+    --borda: #d0d5dd;
+}
+
+body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background:#eef1f5;
+}
+
+.sidebar{
+    width:320px;
+    background:#fff;
+    padding:16px;
+    box-shadow: 2px 0 10px rgba(0,0,0,.08);
+    height:100vh;
+    box-sizing:border-box;
+}
+
+.filtro-bloco{
+    border:1px solid var(--borda);
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:16px;
+}
+
+.filtro-bloco h3{
+    margin:0 0 10px 0;
+    font-size:14px;
+    color:#333;
+}
+
+/* ---------- Comunidade ---------- */
+
+.filtro-comunidade{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.filtro-comunidade input,
+.filtro-comunidade select{
+    width:100%;
+    box-sizing:border-box;
+    padding:8px 10px;
+    border-radius:6px;
+    border:1px solid var(--borda);
+    font-size:14px;
+}
+
+.filtro-comunidade input:focus,
+.filtro-comunidade select:focus{
+    outline:none;
+    border-color:var(--azul);
+    box-shadow:0 0 0 2px rgba(27,63,111,.15);
+}
+
+.linha-acoes{
+    display:flex;
+    gap:8px;
+}
+
+.linha-acoes button{
+    flex:1;
+    padding:8px;
+    border-radius:6px;
+    border:1px solid var(--borda);
+    background:#fff;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.linha-acoes button:hover{
+    background:var(--cinza);
+}
+
+/* ---------- Camadas ---------- */
+
+.lista-camadas{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+/* esconde o checkbox real */
+.lista-camadas input{
+    display:none;
+}
+
+/* botão visual */
+.botao-camada{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 6px;
+    border-radius:8px;
+    border:1px solid var(--borda);
+    background:#fff;
+    font-size:13px;
+    cursor:pointer;
+    text-align:center;
+    transition:all .2s;
+}
+
+/* hover */
+.botao-camada:hover{
+    background:var(--cinza);
+}
+
+/* estado ativo */
+.lista-camadas input:checked + .botao-camada{
+    background:var(--azul);
+    color:#fff;
+    border-color:var(--azul);
+    box-shadow:0 4px 10px rgba(27,63,111,.25);
+}
+
+/* ---------- indicador de filtro ativo ---------- */
+
+.filtro-ativo{
+    margin-top:10px;
+    padding:8px;
+    border-radius:6px;
+    background:#e8f0fb;
+    color:var(--azul);
+    font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+
+    <!-- BLOCO 1 - Comunidade -->
+    <div class="filtro-bloco">
+
+        <h3>🔍 Comunidade</h3>
+
+        <div class="filtro-comunidade">
+
+            <input 
+                type="text"
+                placeholder="Buscar comunidade..."
+            >
+
+            <select>
+                <option value="">Selecione uma comunidade</option>
+                <option>Vale do Reginaldo</option>
+                <option>Vergel do Lago</option>
+                <option>Jacintinho</option>
+            </select>
+
+            <div class="linha-acoes">
+                <button>Aplicar</button>
+                <button>Limpar</button>
+            </div>
+
+            <!-- apenas visual -->
+            <div class="filtro-ativo">
+                Filtro ativo: Vale do Reginaldo
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BLOCO 2 - Camadas -->
+    <div class="filtro-bloco">
+
+        <h3>🗺️ Camadas no mapa</h3>
+
+        <div class="lista-camadas">
+
+            <input type="checkbox" id="abairramento">
+            <label class="botao-camada" for="abairramento">
+                Abairramento
+            </label>
+
+            <input type="checkbox" id="cras">
+            <label class="botao-camada" for="cras">
+                CRAS
+            </label>
+
+            <input type="checkbox" id="escolas">
+            <label class="botao-camada" for="escolas">
+                Escolas
+            </label>
+
+            <input type="checkbox" id="creas">
+            <label class="botao-camada" for="creas">
+                CREAS
+            </label>
+
+            <input type="checkbox" id="restaurante">
+            <label class="botao-camada" for="restaurante">
+                Restaurante Popular
+            </label>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

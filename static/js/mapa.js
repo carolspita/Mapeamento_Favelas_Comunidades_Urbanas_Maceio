@@ -5,9 +5,10 @@ const map = L.map("map", {
 
 let marcadorBusca = null;
 
-// ===============================
-// BARRA DE PESQUISA (ENDEREÇOS)
-// ===============================
+/* ===============================
+   BARRA DE PESQUISA (ENDEREÇOS)
+=============================== */
+
 const geocoder = L.Control.geocoder({
     geocoder: L.Control.Geocoder.nominatim({
         geocodingQueryParams: {
@@ -34,10 +35,10 @@ const geocoder = L.Control.geocoder({
 })
 .addTo(map);
 
+/* ===============================
+   CAMADAS BASE
+=============================== */
 
-// ===============================
-// CAMADAS BASE
-// ===============================
 const baseOSM = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     { attribution: "© OpenStreetMap" }
@@ -58,10 +59,6 @@ const baseCarto = L.tileLayer(
     { attribution: "© CARTO" }
 );
 
-
-// ===============================
-// CONTROLE
-// ===============================
 const baseMaps = {
     "🗺️ Mapa Padrão": baseOSM,
     "🌎 Satélite ESRI": baseEsri,
@@ -71,10 +68,10 @@ const baseMaps = {
 
 L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
 
+/* ===============================
+   VARIÁVEIS
+=============================== */
 
-// ===============================
-// VARIÁVEIS
-// ===============================
 let areasLayer = null;
 let abairramentoLayer = null;
 let camadaSelecionada = null;
@@ -95,10 +92,30 @@ let restaurantepopularVisivel = false;
 
 const areasGrota = ["Vale do Reginaldo", "Recanto Nabal"];
 
+/* ===============================
+   BOTÕES
+=============================== */
 
-// ===============================
-// ESTILOS
-// ===============================
+const btnGrotaNoGrau = document.getElementById("btnGrotaNoGrau");
+const btnAbairramento = document.getElementById("btnAbairramento");
+const btnCRAS = document.getElementById("btnCRAS");
+const btnEscolasMunicipais = document.getElementById("btnEscolasMunicipais");
+const btnCREAS = document.getElementById("btnCREAS");
+const btnRestaurantePopular = document.getElementById("btnRestaurantePopular");
+
+/* ===============================
+   AJUDA VISUAL
+=============================== */
+
+function alternarBotaoAtivo(botao, ativo) {
+    if (ativo) botao.classList.add("ativo");
+    else botao.classList.remove("ativo");
+}
+
+/* ===============================
+   ESTILOS
+=============================== */
+
 function estiloAreas(feature) {
 
     if (filtroGrotaAtivo && areasGrota.includes(feature.properties.nm_fcu)) {
@@ -114,10 +131,10 @@ const estiloAbairramento = {
     fillOpacity: 0
 };
 
+/* ===============================
+   ÁREAS
+=============================== */
 
-// ===============================
-// ÁREAS FCU
-// ===============================
 fetch("/geojson/areas")
     .then(r => r.json())
     .then(data => {
@@ -162,19 +179,14 @@ fetch("/geojson/areas")
             }
         }).addTo(map);
 
-
-        // ===============================
-        // SELECT SEM DUPLICAR NOMES
-        // ===============================
         const select = document.getElementById("areaSelect");
-        select.innerHTML = '<option value="">Selecione uma área</option>';
+        const inputBusca = document.getElementById("areaSearch");
 
         const mapaComunidades = new Map();
 
         areasLayer.eachLayer(layer => {
 
             const nome = layer.feature?.properties?.nm_fcu;
-
             if (!nome) return;
 
             if (!mapaComunidades.has(nome)) {
@@ -182,37 +194,6 @@ fetch("/geojson/areas")
             }
 
         });
-
-        [...mapaComunidades.keys()]
-            .sort((a, b) => a.localeCompare(b))
-            .forEach(nome => {
-
-                const opt = document.createElement("option");
-                opt.value = nome;
-                opt.textContent = nome;
-                select.appendChild(opt);
-
-            });
-
-        select.addEventListener("change", e => {
-
-            const nome = e.target.value;
-
-            if (!nome) return;
-
-            const layer = mapaComunidades.get(nome);
-
-            if (layer) {
-                layer.fire("click");
-            }
-
-        });
-
-
-        // ===============================
-        // BUSCA DE COMUNIDADE (FILTRO DO SELECT)
-        // ===============================
-        const inputBusca = document.getElementById("areaSearch");
 
         function atualizarSelectComFiltro(filtroTexto) {
 
@@ -233,17 +214,29 @@ fetch("/geojson/areas")
                 });
         }
 
+        atualizarSelectComFiltro("");
+
         inputBusca.addEventListener("input", e => {
             atualizarSelectComFiltro(e.target.value);
         });
 
+        select.addEventListener("change", e => {
+
+            const nome = e.target.value;
+            if (!nome) return;
+
+            const layer = mapaComunidades.get(nome);
+            if (layer) layer.fire("click");
+
+        });
+
     });
 
+/* ===============================
+   ABAIRRAMENTO
+=============================== */
 
-// ===============================
-// ABAIRRAMENTO
-// ===============================
-document.getElementById("btnAbairramento").addEventListener("click", () => {
+btnAbairramento.addEventListener("click", () => {
 
     if (!abairramentoLayer) {
 
@@ -274,36 +267,36 @@ document.getElementById("btnAbairramento").addEventListener("click", () => {
                 }).addTo(map);
 
                 abairramentoVisivel = true;
+                alternarBotaoAtivo(btnAbairramento, true);
             });
 
     } else {
 
-        if (abairramentoVisivel) {
-            map.removeLayer(abairramentoLayer);
-        } else {
-            abairramentoLayer.addTo(map);
-        }
+        if (abairramentoVisivel) map.removeLayer(abairramentoLayer);
+        else abairramentoLayer.addTo(map);
 
         abairramentoVisivel = !abairramentoVisivel;
+        alternarBotaoAtivo(btnAbairramento, abairramentoVisivel);
     }
 });
 
+/* ===============================
+   GROTAS
+=============================== */
 
-// ===============================
-// GROTAS
-// ===============================
-document.getElementById("btnGrotaNoGrau").addEventListener("click", () => {
+btnGrotaNoGrau.addEventListener("click", () => {
 
     filtroGrotaAtivo = !filtroGrotaAtivo;
 
     areasLayer.eachLayer(l => areasLayer.resetStyle(l));
 
+    alternarBotaoAtivo(btnGrotaNoGrau, filtroGrotaAtivo);
 });
 
+/* ===============================
+   FUNÇÃO GENÉRICA
+=============================== */
 
-// ===============================
-// FUNÇÃO GENÉRICA DE MARCADOR
-// ===============================
 function criarLayerPontos(url, tooltipPadrao, callbackSetLayer) {
 
     fetch(url)
@@ -341,17 +334,18 @@ function criarLayerPontos(url, tooltipPadrao, callbackSetLayer) {
         });
 }
 
+/* ===============================
+   CRAS
+=============================== */
 
-// ===============================
-// CRAS
-// ===============================
-document.getElementById("btnCRAS").addEventListener("click", () => {
+btnCRAS.addEventListener("click", () => {
 
     if (!crasLayer) {
 
         criarLayerPontos("/geojson/cras", "CRAS", layer => {
             crasLayer = layer;
             crasVisivel = true;
+            alternarBotaoAtivo(btnCRAS, true);
         });
 
     } else {
@@ -360,20 +354,22 @@ document.getElementById("btnCRAS").addEventListener("click", () => {
         else crasLayer.addTo(map);
 
         crasVisivel = !crasVisivel;
+        alternarBotaoAtivo(btnCRAS, crasVisivel);
     }
 });
 
+/* ===============================
+   ESCOLAS
+=============================== */
 
-// ===============================
-// ESCOLAS MUNICIPAIS
-// ===============================
-document.getElementById("btnEscolasMunicipais").addEventListener("click", () => {
+btnEscolasMunicipais.addEventListener("click", () => {
 
     if (!escolasmunicipaisLayer) {
 
         criarLayerPontos("/geojson/escolasmunicipais", "ESCOLA", layer => {
             escolasmunicipaisLayer = layer;
             escolasmunicipaisVisivel = true;
+            alternarBotaoAtivo(btnEscolasMunicipais, true);
         });
 
     } else {
@@ -382,20 +378,22 @@ document.getElementById("btnEscolasMunicipais").addEventListener("click", () => 
         else escolasmunicipaisLayer.addTo(map);
 
         escolasmunicipaisVisivel = !escolasmunicipaisVisivel;
+        alternarBotaoAtivo(btnEscolasMunicipais, escolasmunicipaisVisivel);
     }
 });
 
+/* ===============================
+   CREAS
+=============================== */
 
-// ===============================
-// CREAS
-// ===============================
-document.getElementById("btnCREAS").addEventListener("click", () => {
+btnCREAS.addEventListener("click", () => {
 
     if (!creasLayer) {
 
         criarLayerPontos("/geojson/creas", "CREAS", layer => {
             creasLayer = layer;
             creasVisivel = true;
+            alternarBotaoAtivo(btnCREAS, true);
         });
 
     } else {
@@ -404,20 +402,22 @@ document.getElementById("btnCREAS").addEventListener("click", () => {
         else creasLayer.addTo(map);
 
         creasVisivel = !creasVisivel;
+        alternarBotaoAtivo(btnCREAS, creasVisivel);
     }
 });
 
+/* ===============================
+   RESTAURANTE
+=============================== */
 
-// ===============================
-// RESTAURANTE POPULAR
-// ===============================
-document.getElementById("btnRestaurantePopular").addEventListener("click", () => {
+btnRestaurantePopular.addEventListener("click", () => {
 
     if (!restaurantepopularLayer) {
 
         criarLayerPontos("/geojson/restaurantepopular", "Restaurante", layer => {
             restaurantepopularLayer = layer;
             restaurantepopularVisivel = true;
+            alternarBotaoAtivo(btnRestaurantePopular, true);
         });
 
     } else {
@@ -426,13 +426,14 @@ document.getElementById("btnRestaurantePopular").addEventListener("click", () =>
         else restaurantepopularLayer.addTo(map);
 
         restaurantepopularVisivel = !restaurantepopularVisivel;
+        alternarBotaoAtivo(btnRestaurantePopular, restaurantepopularVisivel);
     }
 });
 
+/* ===============================
+   LIMPAR
+=============================== */
 
-// ===============================
-// LIMPAR
-// ===============================
 document.getElementById("btnLimparFiltros").addEventListener("click", () => {
 
     filtroGrotaAtivo = false;
@@ -450,10 +451,6 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
     document.getElementById("areaSelect").value = "";
     document.getElementById("areaSearch").value = "";
 
-    /* >>> CORREÇÃO
-       força o filtro da barra a ser reexecutado
-       para reconstruir o select completo
-    */
     document
         .getElementById("areaSearch")
         .dispatchEvent(new Event("input"));
@@ -487,5 +484,12 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
         map.removeLayer(restaurantepopularLayer);
         restaurantepopularVisivel = false;
     }
+
+    alternarBotaoAtivo(btnGrotaNoGrau, false);
+    alternarBotaoAtivo(btnAbairramento, false);
+    alternarBotaoAtivo(btnCRAS, false);
+    alternarBotaoAtivo(btnEscolasMunicipais, false);
+    alternarBotaoAtivo(btnCREAS, false);
+    alternarBotaoAtivo(btnRestaurantePopular, false);
 
 });
