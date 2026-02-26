@@ -13,50 +13,99 @@
       gtag('config', 'G-J66WJ5C1KY');
     </script>
 
+    <!-- Leaflet -->
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
 
+    <!-- Geocoder -->
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
     />
 
+    <!-- CSS do projeto -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<header>Mapa de Comunidades – Maceió</header>
+<header class="topbar">
+
+    <div class="topbar-brand">
+
+        <div class="topbar-logo-box">
+            <img
+                src="{{ url_for('static', filename='img/Logo_horizontal_cor.png') }}"
+                alt="Logo IPLAM"
+                class="topbar-logo"
+            >
+        </div>
+
+        <div class="topbar-texts">
+            <span class="topbar-title">Mapa de Comunidades – Maceió</span>
+            <span class="topbar-subtitle">
+                Diretoria Executiva de Inovação Urbana, Comunidades Urbanas e Urbanismo Social
+            </span>
+        </div>
+
+    </div>
+
+</header>
 
 <div id="container">
 
-    <aside id="sidebar">
-        <h3>Filtros</h3>
+    <aside id="sidebar" class="sidebar">
 
-        <select id="areaSelect">
-            <option value="">Selecione uma área</option>
-        </select>
+        <h3 class="sidebar-title">Filtros</h3>
 
-        <button id="btnGrotaNoGrau">Filtrar Grota no Grau</button>
-        <button id="btnAbairramento">Mostrar Abairramento</button>
-        <button id="btnCRAS">Mostrar CRAS</button>
-        <button id="btnEscolasMunicipais">Mostrar Escolas Municipais</button>
-        <button id="btnCREAS">Mostrar CREAS</button>
-        <button id="btnRestaurantePopular">Mostrar Restaurantes Populares</button>
-        <button id="btnLimparFiltros">Limpar filtros</button>
+        <div class="sidebar-group">
+
+            <select id="areaSelect" class="sidebar-select">
+                <option value="">Selecione uma área</option>
+            </select>
+
+            <button id="btnGrotaNoGrau" class="sidebar-button">Filtrar Grota no Grau</button>
+            <button id="btnAbairramento" class="sidebar-button">Mostrar Abairramento</button>
+            <button id="btnCRAS" class="sidebar-button">Mostrar CRAS</button>
+            <button id="btnEscolasMunicipais" class="sidebar-button">Mostrar Escolas Municipais</button>
+            <button id="btnCREAS" class="sidebar-button">Mostrar CREAS</button>
+            <button id="btnRestaurantePopular" class="sidebar-button">Mostrar Restaurantes Populares</button>
+
+            <button id="btnLimparFiltros" class="sidebar-button sidebar-button-danger">
+                Limpar filtros
+            </button>
+
+        </div>
     </aside>
 
-    <main id="map-container">
+    <main id="map-container" class="main-panel">
 
-        <div id="info-cards">
-            <div class="card"><span>Comunidade</span><strong id="info-nome">—</strong></div>
-            <div class="card"><span>População</span><strong id="info-populacao">—</strong></div>
-            <div class="card"><span>Domicílios</span><strong id="info-domicilios">—</strong></div>
-            <div class="card"><span>Área (km²)</span><strong id="info-area">—</strong></div>
+        <div id="info-cards" class="info-cards">
+
+            <div class="card info-card">
+                <span>Comunidade</span>
+                <strong id="info-nome">—</strong>
+            </div>
+
+            <div class="card info-card">
+                <span>População</span>
+                <strong id="info-populacao">—</strong>
+            </div>
+
+            <div class="card info-card">
+                <span>Domicílios</span>
+                <strong id="info-domicilios">—</strong>
+            </div>
+
+            <div class="card info-card">
+                <span>Área (km²)</span>
+                <strong id="info-area">—</strong>
+            </div>
+
         </div>
 
-        <div id="map"></div>
+        <div id="map" class="map-panel"></div>
 
     </main>
 </div>

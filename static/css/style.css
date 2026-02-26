@@ -1,55 +1,264 @@
+/* =====================================================
+   VARIÁVEIS DE CORES – BASEADAS NA LOGO DO IPLAM
+===================================================== */
+:root {
+    --azul-iplam: #1b3f6f;
+    --azul-claro-iplam: #3b73c4;
+    --laranja-iplam: #f27c2a;
+    --verde-iplam: #8bbf2f;
+
+    --cinza-fundo: #f1f5f9;
+    --cinza-borda: #e5e7eb;
+}
+
+/* =====================================================
+   RESET
+===================================================== */
+
 html, body {
     height: 100%;
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: var(--cinza-fundo);
 }
 
-header {
-    background: #1f2937;
-    color: white;
-    padding: 12px;
-    font-weight: bold;
+/* =====================================================
+   HEADER
+===================================================== */
+
+.topbar {
+    height: 100px;
+    background: linear-gradient(
+        90deg,
+        var(--azul-iplam),
+        var(--azul-claro-iplam)
+    );
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
+
+/* Agrupa logo + textos */
+.topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* CAIXA BRANCA DA LOGO (para não “apagar” a logo) */
+.topbar-logo-box {
+    background: #ffffff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+/* Logo horizontal */
+.topbar-logo {
+    max-height: 70px;   /* acompanha o header de 100px */
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* Textos do header */
+.topbar-texts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.2;
+    color: #ffffff;
+}
+
+.topbar-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .3px;
+}
+
+.topbar-subtitle {
+    font-size: 12px;
+    opacity: .9; /* somente o subtítulo */
+}
+
+/* =====================================================
+   CONTAINER PRINCIPAL
+===================================================== */
 
 #container {
     display: flex;
-    height: calc(100vh - 48px);
+    height: calc(100vh - 110px); /* acompanha a altura real do header */
 }
 
-#sidebar {
-    width: 260px;
-    padding: 12px;
-    background: #fff;
-    border-right: 1px solid #ddd;
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+#sidebar.sidebar {
+    width: 270px;
+    background: #ffffff;
+    border-right: 1px solid var(--cinza-borda);
+    padding: 14px 12px;
+    box-sizing: border-box;
 }
 
-#map-container {
+.sidebar-title {
+    margin: 4px 0 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--azul-iplam);
+}
+
+.sidebar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-select {
+    width: 100%;
+    padding: 9px 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    font-size: 13px;
+}
+
+/* Botões padrão */
+.sidebar-button {
+    width: 100%;
+    padding: 9px 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s ease;
+}
+
+/* Hover */
+.sidebar-button:hover {
+    background: #e0edff;
+    border-color: var(--azul-claro-iplam);
+}
+
+/* Botão limpar filtros */
+.sidebar-button-danger {
+    margin-top: 8px;
+    background: #fff4ec;
+    border-color: var(--laranja-iplam);
+    color: #8a3b06;
+}
+
+.sidebar-button-danger:hover {
+    background: #ffe6d5;
+}
+
+/* =====================================================
+   PAINEL PRINCIPAL
+===================================================== */
+
+#map-container.main-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background: var(--cinza-fundo);
+    padding: 10px;
+    box-sizing: border-box;
+    gap: 10px;
 }
 
-#map {
+/* =====================================================
+   CARDS
+===================================================== */
+
+#info-cards.info-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(160px, 1fr));
+    gap: 10px;
+}
+
+.info-card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 10px 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 60px;
+    border-left: 4px solid var(--verde-iplam);
+}
+
+.info-card span {
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.info-card strong {
+    font-size: 16px;
+    color: var(--azul-iplam);
+    font-weight: 600;
+}
+
+/* =====================================================
+   MAPA
+===================================================== */
+
+#map.map-panel {
     flex: 1;
     width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(0,0,0,.15);
 }
 
-#info-cards {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    background: #f8fafc;
+/* =====================================================
+   CONTROLES DO LEAFLET
+===================================================== */
+
+.leaflet-control {
+    border-radius: 6px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,.2) !important;
 }
 
-.card {
-    background: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+.leaflet-control-layers {
+    font-size: 12px;
 }
 
-button, select {
-    width: 100%;
-    margin-top: 8px;
-    padding: 8px;
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media (max-width: 900px) {
+
+    #container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    #sidebar.sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--cinza-borda);
+    }
+
+    #info-cards.info-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .topbar {
+        min-height: 120px;
+    }
+
+    .topbar-logo {
+        height: 80px;
+        max-height: 80px;
+    }
+
 }
