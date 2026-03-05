@@ -90,6 +90,9 @@ let creasVisivel = false;
 let restaurantepopularLayer = null;
 let restaurantepopularVisivel = false;
 
+let gigantinhosLayer = null;
+let gigantinhosVisivel = false;
+
 const areasGrota = ["Vale do Reginaldo", "Recanto Nabal"];
 
 /* ===============================
@@ -102,6 +105,7 @@ const btnCRAS = document.getElementById("btnCRAS");
 const btnEscolasMunicipais = document.getElementById("btnEscolasMunicipais");
 const btnCREAS = document.getElementById("btnCREAS");
 const btnRestaurantePopular = document.getElementById("btnRestaurantePopular");
+const btnGigantinhos = document.getElementById("btnGigantinhos");
 
 /* ===============================
    AJUDA VISUAL
@@ -431,6 +435,30 @@ btnRestaurantePopular.addEventListener("click", () => {
 });
 
 /* ===============================
+   GIGANTINHOS
+=============================== */
+
+btnGigantinhos.addEventListener("click", () => {
+
+    if (!gigantinhosLayer) {
+
+        criarLayerPontos("/geojson/gigantinhos", "Gigantinho", layer => {
+            gigantinhosLayer = layer;
+            gigantinhosVisivel = true;
+            alternarBotaoAtivo(btnGigantinhos, true);
+        });
+
+    } else {
+
+        if (gigantinhosVisivel) map.removeLayer(gigantinhosLayer);
+        else gigantinhosLayer.addTo(map);
+
+        gigantinhosVisivel = !gigantinhosVisivel;
+        alternarBotaoAtivo(btnGigantinhos, gigantinhosVisivel);
+    }
+});
+
+/* ===============================
    LIMPAR
 =============================== */
 
@@ -484,6 +512,10 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
         map.removeLayer(restaurantepopularLayer);
         restaurantepopularVisivel = false;
     }
+    if (gigantinhosLayer && gigantinhosVisivel) {
+    map.removeLayer(gigantinhosLayer);
+    gigantinhosVisivel = false;
+    }   
 
     alternarBotaoAtivo(btnGrotaNoGrau, false);
     alternarBotaoAtivo(btnAbairramento, false);
@@ -491,5 +523,6 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
     alternarBotaoAtivo(btnEscolasMunicipais, false);
     alternarBotaoAtivo(btnCREAS, false);
     alternarBotaoAtivo(btnRestaurantePopular, false);
+    alternarBotaoAtivo(btnGigantinhos, false);
 
 });
