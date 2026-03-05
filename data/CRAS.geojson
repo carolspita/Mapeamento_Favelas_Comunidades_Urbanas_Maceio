@@ -1,1 +1,390 @@
-{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7238045079903,-9.64021916397849,0]},"properties":{"name":"TEREZINHA NORMANDE","fid":1,"ID":1,"UNIDADE":"CRAS","NOME":"CRAS - TEREZINHA NORMANDE","N":-9.64021916397849,"W":-35.7238045079903}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7117416807368,-9.63666350544024,0]},"properties":{"name":"SONIA SAMPAIO","fid":2,"ID":2,"UNIDADE":"CRAS","NOME":"CRAS - SONIA SAMPAIO","N":-9.63666350544024,"W":-35.7117416807368}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7502578003161,-9.67249085719097,0]},"properties":{"name":"DOM ADELMO MACHADO","fid":3,"ID":3,"UNIDADE":"CRAS","NOME":"CRAS - DOM ADELMO MACHADO","N":-9.67249085719097,"W":-35.7502578003161}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7604545351151,-9.54904394190926,0]},"properties":{"name":"DENISSON MENEZES","fid":4,"ID":4,"UNIDADE":"CRAS","NOME":"CRAS - DENISSON MENEZES","N":-9.54904394190926,"W":-35.7604545351151}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7310276115423,-9.6383248052103,0]},"properties":{"name":"PITANGUINHA","fid":5,"ID":5,"UNIDADE":"CRAS","NOME":"CRAS - PITANGUINHA","N":-9.6383248052103,"W":-35.7310276115423}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7872777116507,-9.55524075234293,0]},"properties":{"name":"SANTOS DUMONT","fid":6,"ID":6,"UNIDADE":"CRAS","NOME":"CRAS - SANTOS DUMONT","N":-9.55524075234293,"W":-35.7872777116507}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7597777691487,-9.66237858609974,0]},"properties":{"name":"CACILDA SAMPAIO","fid":7,"ID":7,"UNIDADE":"CRAS","NOME":"CRAS - CACILDA SAMPAIO","N":-9.66237858609974,"W":-35.7597777691487}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7493541941116,-9.62204658309417,0]},"properties":{"name":"BEBEDOURO","fid":8,"ID":8,"UNIDADE":"CRAS","NOME":"CRAS - BEBEDOURO","N":-9.62204658309417,"W":-35.7493541941116}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7100913926222,-9.61994517553777,0]},"properties":{"name":"BELA VISTA","fid":9,"ID":9,"UNIDADE":"CRAS","NOME":"CRAS - BELA VISTA","N":-9.61994517553777,"W":-35.7100913926222}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7193002521568,-9.57498501245618,0]},"properties":{"name":"SELMA BANDEIRA","fid":10,"ID":10,"UNIDADE":"CRAS","NOME":"CRAS - SELMA BANDEIRA","N":-9.57498501245618,"W":-35.7193002521568},"id":9},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7071519537954,-9.63980637061669,0]},"properties":{"name":"LAR SÃO DOMINGOS","fid":11,"ID":11,"UNIDADE":"CRAS","NOME":"CRAS - LAR SÃO DOMINGOS","N":-9.63980637061669,"W":-35.7071519537954}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7484414140802,-9.66562210395977,0]},"properties":{"name":"ÁREA LAGUNAR","fid":12,"ID":12,"UNIDADE":"CRAS","NOME":"CRAS - ÁREA LAGUNAR","N":-9.66562210395977,"W":-35.7484414140802}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7391264854661,-9.65771231458911,0]},"properties":{"name":"BOM PARTO","fid":13,"ID":13,"UNIDADE":"CRAS","NOME":"CRAS - BOM PARTO","N":-9.65771231458911,"W":-35.7391264854661}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7258669238811,-9.56121293303229,0]},"properties":{"name":"CIDADE SORRISO","fid":14,"ID":14,"UNIDADE":"CRAS","NOME":"CRAS - CIDADE SORRISO","N":-9.56121293303229,"W":-35.7258669238811}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.750023640723,-9.5480739262062,0]},"properties":{"name":"DENISON MENEZES","fid":15,"ID":16,"UNIDADE":"CRAS","NOME":"CRAS - DENISON MENEZES","N":-9.5480739262062,"W":-35.750023640723}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7854321066072,-9.5902722300108,0]},"properties":{"name":"FERNÃO VELHO","fid":16,"ID":17,"UNIDADE":"CRAS","NOME":"CRAS - FERNÃO VELHO","N":-9.5902722300108,"W":-35.7854321066072},"id":15},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.6567489611684,-9.57723893854641,0]},"properties":{"name":"LITORAL NORTE","fid":17,"ID":18,"UNIDADE":"CRAS","NOME":"CRAS - LITORAL NORTE","N":-9.57723893854641,"W":-35.6567489611684},"id":16},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.8077600035775,-9.57127210223091,0]},"properties":{"name":"RIO NOVO","fid":18,"ID":19,"UNIDADE":"CRAS","NOME":"CRAS - RIO NOVO","N":-9.57127210223091,"W":-35.8077600035775},"id":17},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.7780764153527,-9.58029353182836,0]},"properties":{"name":"CLIMA BOM","fid":19,"ID":15,"UNIDADE":"CRAS","NOME":"CRAS - CLIMA BOM","N":-9.58029353182836,"W":-35.7780764153527},"id":18}]}
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7238045079903,
+                    -9.64021916397849,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "TEREZINHA NORMANDE",
+                "fid": 1,
+                "ID": 1,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - TEREZINHA NORMANDE",
+                "N": -9.64021916397849,
+                "W": -35.7238045079903
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7117416807368,
+                    -9.63666350544024,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "SONIA SAMPAIO",
+                "fid": 2,
+                "ID": 2,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - SONIA SAMPAIO",
+                "N": -9.63666350544024,
+                "W": -35.7117416807368
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7502578003161,
+                    -9.67249085719097,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "DOM ADELMO MACHADO",
+                "fid": 3,
+                "ID": 3,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - DOM ADELMO MACHADO",
+                "N": -9.67249085719097,
+                "W": -35.7502578003161
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7604545351151,
+                    -9.54904394190926,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "DENISSON MENEZES",
+                "fid": 4,
+                "ID": 4,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - DENISSON MENEZES",
+                "N": -9.54904394190926,
+                "W": -35.7604545351151
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7310276115423,
+                    -9.6383248052103,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "PITANGUINHA",
+                "fid": 5,
+                "ID": 5,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - PITANGUINHA",
+                "N": -9.6383248052103,
+                "W": -35.7310276115423
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7872777116507,
+                    -9.55524075234293,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "SANTOS DUMONT",
+                "fid": 6,
+                "ID": 6,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - SANTOS DUMONT",
+                "N": -9.55524075234293,
+                "W": -35.7872777116507
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7597777691487,
+                    -9.66237858609974,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "CACILDA SAMPAIO",
+                "fid": 7,
+                "ID": 7,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - CACILDA SAMPAIO",
+                "N": -9.66237858609974,
+                "W": -35.7597777691487
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7493541941116,
+                    -9.62204658309417,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "BEBEDOURO",
+                "fid": 8,
+                "ID": 8,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - BEBEDOURO",
+                "N": -9.62204658309417,
+                "W": -35.7493541941116
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7100913926222,
+                    -9.61994517553777,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "BELA VISTA",
+                "fid": 9,
+                "ID": 9,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - BELA VISTA",
+                "N": -9.61994517553777,
+                "W": -35.7100913926222
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7193002521568,
+                    -9.57498501245618,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "SELMA BANDEIRA",
+                "fid": 10,
+                "ID": 10,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - SELMA BANDEIRA",
+                "N": -9.57498501245618,
+                "W": -35.7193002521568
+            },
+            "id": 9
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7071519537954,
+                    -9.63980637061669,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "LAR SÃO DOMINGOS",
+                "fid": 11,
+                "ID": 11,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - LAR SÃO DOMINGOS",
+                "N": -9.63980637061669,
+                "W": -35.7071519537954
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7484414140802,
+                    -9.66562210395977,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "ÁREA LAGUNAR",
+                "fid": 12,
+                "ID": 12,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - ÁREA LAGUNAR",
+                "N": -9.66562210395977,
+                "W": -35.7484414140802
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7391264854661,
+                    -9.65771231458911,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "BOM PARTO",
+                "fid": 13,
+                "ID": 13,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - BOM PARTO",
+                "N": -9.65771231458911,
+                "W": -35.7391264854661
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7258669238811,
+                    -9.56121293303229,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "CIDADE SORRISO",
+                "fid": 14,
+                "ID": 14,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - CIDADE SORRISO",
+                "N": -9.56121293303229,
+                "W": -35.7258669238811
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.750023640723,
+                    -9.5480739262062,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "DENISON MENEZES",
+                "fid": 15,
+                "ID": 16,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - DENISON MENEZES",
+                "N": -9.5480739262062,
+                "W": -35.750023640723
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7854321066072,
+                    -9.5902722300108,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "FERNÃO VELHO",
+                "fid": 16,
+                "ID": 17,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - FERNÃO VELHO",
+                "N": -9.5902722300108,
+                "W": -35.7854321066072
+            },
+            "id": 15
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.6567489611684,
+                    -9.57723893854641,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "LITORAL NORTE",
+                "fid": 17,
+                "ID": 18,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - LITORAL NORTE",
+                "N": -9.57723893854641,
+                "W": -35.6567489611684
+            },
+            "id": 16
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.8077600035775,
+                    -9.57127210223091,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "RIO NOVO",
+                "fid": 18,
+                "ID": 19,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - RIO NOVO",
+                "N": -9.57127210223091,
+                "W": -35.8077600035775
+            },
+            "id": 17
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7780764153527,
+                    -9.58029353182836,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "CLIMA BOM",
+                "fid": 19,
+                "ID": 15,
+                "UNIDADE": "CRAS",
+                "NOME": "CRAS - CLIMA BOM",
+                "N": -9.58029353182836,
+                "W": -35.7780764153527
+            },
+            "id": 18
+        }
+    ]
+}

@@ -96,6 +96,25 @@ let gigantinhosVisivel = false;
 const areasGrota = ["Vale do Reginaldo", "Recanto Nabal"];
 
 /* ===============================
+   CONTADOR DE EQUIPAMENTOS
+=============================== */
+
+function atualizarContagemEquipamentos() {
+
+    let total = 0;
+
+    if (crasLayer && crasVisivel) total += crasLayer.getLayers().length;
+    if (escolasmunicipaisLayer && escolasmunicipaisVisivel) total += escolasmunicipaisLayer.getLayers().length;
+    if (creasLayer && creasVisivel) total += creasLayer.getLayers().length;
+    if (restaurantepopularLayer && restaurantepopularVisivel) total += restaurantepopularLayer.getLayers().length;
+    if (gigantinhosLayer && gigantinhosVisivel) total += gigantinhosLayer.getLayers().length;
+
+    const contador = document.getElementById("contador-equipamentos");
+
+    if (contador) contador.innerText = total;
+}
+
+/* ===============================
    BOTÕES
 =============================== */
 
@@ -142,6 +161,18 @@ const estiloAbairramento = {
 fetch("/geojson/areas")
     .then(r => r.json())
     .then(data => {
+
+        const comunidadesUnicas = new Set();
+
+        data.features.forEach(f => {
+            const nome = f.properties?.nm_fcu;
+            if (nome) comunidadesUnicas.add(nome);
+        });
+
+        const totalComunidades = comunidadesUnicas.size;
+
+        const contador = document.getElementById("contador-comunidades");
+        if (contador) contador.innerText = totalComunidades;
 
         areasLayer = L.geoJSON(data, {
             style: estiloAreas,
@@ -335,6 +366,8 @@ function criarLayerPontos(url, tooltipPadrao, callbackSetLayer) {
 
             callbackSetLayer(layer);
 
+            atualizarContagemEquipamentos();
+
         });
 }
 
@@ -350,6 +383,7 @@ btnCRAS.addEventListener("click", () => {
             crasLayer = layer;
             crasVisivel = true;
             alternarBotaoAtivo(btnCRAS, true);
+            atualizarContagemEquipamentos();
         });
 
     } else {
@@ -359,6 +393,7 @@ btnCRAS.addEventListener("click", () => {
 
         crasVisivel = !crasVisivel;
         alternarBotaoAtivo(btnCRAS, crasVisivel);
+        atualizarContagemEquipamentos();
     }
 });
 
@@ -374,6 +409,7 @@ btnEscolasMunicipais.addEventListener("click", () => {
             escolasmunicipaisLayer = layer;
             escolasmunicipaisVisivel = true;
             alternarBotaoAtivo(btnEscolasMunicipais, true);
+            atualizarContagemEquipamentos();
         });
 
     } else {
@@ -383,6 +419,7 @@ btnEscolasMunicipais.addEventListener("click", () => {
 
         escolasmunicipaisVisivel = !escolasmunicipaisVisivel;
         alternarBotaoAtivo(btnEscolasMunicipais, escolasmunicipaisVisivel);
+        atualizarContagemEquipamentos();
     }
 });
 
@@ -398,6 +435,7 @@ btnCREAS.addEventListener("click", () => {
             creasLayer = layer;
             creasVisivel = true;
             alternarBotaoAtivo(btnCREAS, true);
+            atualizarContagemEquipamentos();
         });
 
     } else {
@@ -407,6 +445,7 @@ btnCREAS.addEventListener("click", () => {
 
         creasVisivel = !creasVisivel;
         alternarBotaoAtivo(btnCREAS, creasVisivel);
+        atualizarContagemEquipamentos();
     }
 });
 
@@ -422,6 +461,7 @@ btnRestaurantePopular.addEventListener("click", () => {
             restaurantepopularLayer = layer;
             restaurantepopularVisivel = true;
             alternarBotaoAtivo(btnRestaurantePopular, true);
+            atualizarContagemEquipamentos();
         });
 
     } else {
@@ -431,6 +471,7 @@ btnRestaurantePopular.addEventListener("click", () => {
 
         restaurantepopularVisivel = !restaurantepopularVisivel;
         alternarBotaoAtivo(btnRestaurantePopular, restaurantepopularVisivel);
+        atualizarContagemEquipamentos();
     }
 });
 
@@ -446,6 +487,7 @@ btnGigantinhos.addEventListener("click", () => {
             gigantinhosLayer = layer;
             gigantinhosVisivel = true;
             alternarBotaoAtivo(btnGigantinhos, true);
+            atualizarContagemEquipamentos();
         });
 
     } else {
@@ -455,6 +497,7 @@ btnGigantinhos.addEventListener("click", () => {
 
         gigantinhosVisivel = !gigantinhosVisivel;
         alternarBotaoAtivo(btnGigantinhos, gigantinhosVisivel);
+        atualizarContagemEquipamentos();
     }
 });
 
@@ -512,10 +555,11 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
         map.removeLayer(restaurantepopularLayer);
         restaurantepopularVisivel = false;
     }
+
     if (gigantinhosLayer && gigantinhosVisivel) {
-    map.removeLayer(gigantinhosLayer);
-    gigantinhosVisivel = false;
-    }   
+        map.removeLayer(gigantinhosLayer);
+        gigantinhosVisivel = false;
+    }
 
     alternarBotaoAtivo(btnGrotaNoGrau, false);
     alternarBotaoAtivo(btnAbairramento, false);
@@ -524,5 +568,7 @@ document.getElementById("btnLimparFiltros").addEventListener("click", () => {
     alternarBotaoAtivo(btnCREAS, false);
     alternarBotaoAtivo(btnRestaurantePopular, false);
     alternarBotaoAtivo(btnGigantinhos, false);
+
+    atualizarContagemEquipamentos();
 
 });

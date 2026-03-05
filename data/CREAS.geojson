@@ -1,1 +1,160 @@
-{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.702787,-9.650635,0]},"properties":{"name":"JATIUCA","description":{"@type":"html","value":"descrição: <br>fid: 1<br>ID: 1<br>UNIDADE: CREAS<br>NOME: CREAS - JATIUCA<br>TIPO: ALUGADO<br>LONG (X): -35.7027871460104<br>LAT (Y): -9.65063453751105"},"styleUrl":"#icon-1603-673AB7","icon-opacity":1,"icon-color":"#673ab7","icon-scale":1,"icon":"https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png","descrição":"","fid":1,"ID":1,"UNIDADE":"CREAS","NOME":"CREAS - JATIUCA","TIPO":"ALUGADO","LONG (X)":-35.7027871460104,"LAT (Y)":-9.65063453751105}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.743743,-9.667446,0]},"properties":{"name":"ORLA LAGUNAR","description":{"@type":"html","value":"descrição: <br>fid: 2<br>ID: 2<br>UNIDADE: CREAS<br>NOME: CREAS - ORLA LAGUNAR<br>TIPO: ALUGADO<br>LONG (X): -35.743742533374<br>LAT (Y): -9.66744576502358"},"styleUrl":"#icon-1603-673AB7","icon-opacity":1,"icon-color":"#673ab7","icon-scale":1,"icon":"https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png","descrição":"","fid":2,"ID":2,"UNIDADE":"CREAS","NOME":"CREAS - ORLA LAGUNAR","TIPO":"ALUGADO","LONG (X)":-35.743742533374,"LAT (Y)":-9.66744576502358}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.755934,-9.577126,0]},"properties":{"name":"SANTA LUCIA","description":{"@type":"html","value":"descrição: <br>fid: 3<br>ID: 3<br>UNIDADE: CREAS<br>NOME: CREAS - SANTA LUCIA<br>TIPO: ALUGADO<br>LONG (X): -35.7559337561185<br>LAT (Y): -9.57712648544075"},"styleUrl":"#icon-1603-673AB7","icon-opacity":1,"icon-color":"#673ab7","icon-scale":1,"icon":"https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png","descrição":"","fid":3,"ID":3,"UNIDADE":"CREAS","NOME":"CREAS - SANTA LUCIA","TIPO":"ALUGADO","LONG (X)":-35.7559337561185,"LAT (Y)":-9.57712648544075}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.714711,-9.568677,0]},"properties":{"name":"BENEDITO BENTES","description":{"@type":"html","value":"descrição: <br>fid: 4<br>ID: 4<br>UNIDADE: CREAS<br>NOME: CREAS - BENEDITO BENTES<br>TIPO: PRÓPRIO<br>LONG (X): -35.7147111263143<br>LAT (Y): -9.56867660916144"},"styleUrl":"#icon-1603-673AB7","icon-opacity":1,"icon-color":"#673ab7","icon-scale":1,"icon":"https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png","descrição":"","fid":4,"ID":4,"UNIDADE":"CREAS","NOME":"CREAS - BENEDITO BENTES","TIPO":"PRÓPRIO","LONG (X)":-35.7147111263143,"LAT (Y)":-9.56867660916144}},{"type":"Feature","geometry":{"type":"Point","coordinates":[-35.723906,-9.660348,0]},"properties":{"name":"POÇO e  L.A","description":{"@type":"html","value":"descrição: <br>fid: 5<br>ID: 5<br>UNIDADE: CREAS<br>NOME: CREAS - POÇO e L.A<br>TIPO: PRÓPRIO<br>LONG (X): -35.7239058245654<br>LAT (Y): -9.66034778639445"},"styleUrl":"#icon-1603-673AB7","icon-opacity":1,"icon-color":"#673ab7","icon-scale":1,"icon":"https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png","descrição":"","fid":5,"ID":5,"UNIDADE":"CREAS","NOME":"CREAS - POÇO e L.A","TIPO":"PRÓPRIO","LONG (X)":-35.7239058245654,"LAT (Y)":-9.66034778639445}}]}
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.702787,
+                    -9.650635,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "JATIUCA",
+                "description": {
+                    "@type": "html",
+                    "value": "descrição: <br>fid: 1<br>ID: 1<br>UNIDADE: CREAS<br>NOME: CREAS - JATIUCA<br>TIPO: ALUGADO<br>LONG (X): -35.7027871460104<br>LAT (Y): -9.65063453751105"
+                },
+                "styleUrl": "#icon-1603-673AB7",
+                "icon-opacity": 1,
+                "icon-color": "#673ab7",
+                "icon-scale": 1,
+                "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png",
+                "descrição": "",
+                "fid": 1,
+                "ID": 1,
+                "UNIDADE": "CREAS",
+                "NOME": "CREAS - JATIUCA",
+                "TIPO": "ALUGADO",
+                "LONG (X)": -35.7027871460104,
+                "LAT (Y)": -9.65063453751105
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.743743,
+                    -9.667446,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "ORLA LAGUNAR",
+                "description": {
+                    "@type": "html",
+                    "value": "descrição: <br>fid: 2<br>ID: 2<br>UNIDADE: CREAS<br>NOME: CREAS - ORLA LAGUNAR<br>TIPO: ALUGADO<br>LONG (X): -35.743742533374<br>LAT (Y): -9.66744576502358"
+                },
+                "styleUrl": "#icon-1603-673AB7",
+                "icon-opacity": 1,
+                "icon-color": "#673ab7",
+                "icon-scale": 1,
+                "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png",
+                "descrição": "",
+                "fid": 2,
+                "ID": 2,
+                "UNIDADE": "CREAS",
+                "NOME": "CREAS - ORLA LAGUNAR",
+                "TIPO": "ALUGADO",
+                "LONG (X)": -35.743742533374,
+                "LAT (Y)": -9.66744576502358
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.755934,
+                    -9.577126,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "SANTA LUCIA",
+                "description": {
+                    "@type": "html",
+                    "value": "descrição: <br>fid: 3<br>ID: 3<br>UNIDADE: CREAS<br>NOME: CREAS - SANTA LUCIA<br>TIPO: ALUGADO<br>LONG (X): -35.7559337561185<br>LAT (Y): -9.57712648544075"
+                },
+                "styleUrl": "#icon-1603-673AB7",
+                "icon-opacity": 1,
+                "icon-color": "#673ab7",
+                "icon-scale": 1,
+                "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png",
+                "descrição": "",
+                "fid": 3,
+                "ID": 3,
+                "UNIDADE": "CREAS",
+                "NOME": "CREAS - SANTA LUCIA",
+                "TIPO": "ALUGADO",
+                "LONG (X)": -35.7559337561185,
+                "LAT (Y)": -9.57712648544075
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.714711,
+                    -9.568677,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "BENEDITO BENTES",
+                "description": {
+                    "@type": "html",
+                    "value": "descrição: <br>fid: 4<br>ID: 4<br>UNIDADE: CREAS<br>NOME: CREAS - BENEDITO BENTES<br>TIPO: PRÓPRIO<br>LONG (X): -35.7147111263143<br>LAT (Y): -9.56867660916144"
+                },
+                "styleUrl": "#icon-1603-673AB7",
+                "icon-opacity": 1,
+                "icon-color": "#673ab7",
+                "icon-scale": 1,
+                "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png",
+                "descrição": "",
+                "fid": 4,
+                "ID": 4,
+                "UNIDADE": "CREAS",
+                "NOME": "CREAS - BENEDITO BENTES",
+                "TIPO": "PRÓPRIO",
+                "LONG (X)": -35.7147111263143,
+                "LAT (Y)": -9.56867660916144
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.723906,
+                    -9.660348,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "POÇO e  L.A",
+                "description": {
+                    "@type": "html",
+                    "value": "descrição: <br>fid: 5<br>ID: 5<br>UNIDADE: CREAS<br>NOME: CREAS - POÇO e L.A<br>TIPO: PRÓPRIO<br>LONG (X): -35.7239058245654<br>LAT (Y): -9.66034778639445"
+                },
+                "styleUrl": "#icon-1603-673AB7",
+                "icon-opacity": 1,
+                "icon-color": "#673ab7",
+                "icon-scale": 1,
+                "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png",
+                "descrição": "",
+                "fid": 5,
+                "ID": 5,
+                "UNIDADE": "CREAS",
+                "NOME": "CREAS - POÇO e L.A",
+                "TIPO": "PRÓPRIO",
+                "LONG (X)": -35.7239058245654,
+                "LAT (Y)": -9.66034778639445
+            }
+        }
+    ]
+}
