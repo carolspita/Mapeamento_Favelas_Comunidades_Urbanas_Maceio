@@ -3,6 +3,130 @@
     "features": [
         {
             "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7417534 -9.6619534)",
+                "nome": "Gigantinhos - Poço",
+                "descrição": "Unidade poço"
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7446893 -9.5643412)",
+                "nome": "Gigantinhos - Antares",
+                "descrição": ""
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7251498 -9.6301236)",
+                "nome": "Gigantinhos - Feitosa",
+                "descrição": ""
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7808349 -9.559733)",
+                "nome": "Gigantinhos - Cmei Professora Maria Elisabete dos Santos",
+                "descrição": "Unidade Santos Drumont"
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7473561 -9.5473005)",
+                "nome": "Gigantinhos - Graciliano",
+                "descrição": ""
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7267473 -9.5694752)",
+                "nome": "Cmei Professora Maria Ivone Santos De Oliveira",
+                "descrição": "Gigantinho"
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7510784 -9.6279904)",
+                "nome": "Cmei- Vereador Braga Neto",
+                "descrição": "Gigantinho"
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7826886 -9.5280185)",
+                "nome": "CMEI José Orlando Cajé",
+                "descrição": "Gigantinho "
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7296822 -9.6012085)",
+                "nome": "CMEI Estudante João Pedro Bernardino",
+                "descrição": "Gigantinho"
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7703481 -9.5792929)",
+                "nome": "CMEI-RP Profª Simone Ferreira Simão",
+                "descrição": "Gigantinho "
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7455375 -9.617434099999999)",
+                "nome": "CMEI-Professora Zaira Nascimento de Oliveira  ",
+                "descrição": "Gigantinhos Chã de Jaqueira "
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "Ainda não incluído no maps "
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.6641165 -9.585804)",
+                "nome": "Gigantinhos Garça Torta ",
+                "descrição": "ua Santa Maria. Obs: ainda não localizado pelo maps"
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "WKT": "POINT (-35.7159023 -9.6647368)",
+                "nome": "Gigantinhos - Ponta da Terra",
+                "descrição": ""
+            },
+            "geometry": null
+        },
+        {
+            "type": "Feature",
             "geometry": {
                 "type": "Point",
                 "coordinates": [
@@ -41,33 +165,6 @@
             },
             "properties": {
                 "name": "Gigantinhos - Antares",
-                "styleUrl": "#icon-1899-C2185B-nodesc",
-                "icon-opacity": 1,
-                "icon-color": "#c2185b",
-                "icon-scale": 1,
-                "icon-offset": [
-                    32,
-                    64
-                ],
-                "icon-offset-units": [
-                    "pixels",
-                    "insetPixels"
-                ],
-                "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    -35.7159023,
-                    -9.6647368,
-                    0
-                ]
-            },
-            "properties": {
-                "name": "Gigantinhos - Ponta da Terra",
                 "styleUrl": "#icon-1899-C2185B-nodesc",
                 "icon-opacity": 1,
                 "icon-color": "#c2185b",
@@ -322,6 +419,61 @@
                     "value": "Gigantinhos Chã de Jaqueira <br>Ainda não incluído no maps "
                 },
                 "styleUrl": "#icon-1899-C2185B",
+                "icon-opacity": 1,
+                "icon-color": "#c2185b",
+                "icon-scale": 1,
+                "icon-offset": [
+                    32,
+                    64
+                ],
+                "icon-offset-units": [
+                    "pixels",
+                    "insetPixels"
+                ],
+                "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.6641165,
+                    -9.585804,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "Gigantinhos Garça Torta ",
+                "description": "ua Santa Maria. Obs: ainda não localizado pelo maps",
+                "styleUrl": "#icon-1899-C2185B",
+                "icon-opacity": 1,
+                "icon-color": "#c2185b",
+                "icon-scale": 1,
+                "icon-offset": [
+                    32,
+                    64
+                ],
+                "icon-offset-units": [
+                    "pixels",
+                    "insetPixels"
+                ],
+                "icon": "https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -35.7159023,
+                    -9.6647368,
+                    0
+                ]
+            },
+            "properties": {
+                "name": "Gigantinhos - Ponta da Terra",
+                "styleUrl": "#icon-1899-C2185B-nodesc",
                 "icon-opacity": 1,
                 "icon-color": "#c2185b",
                 "icon-scale": 1,
